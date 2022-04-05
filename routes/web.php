@@ -20,12 +20,12 @@ Auth::routes();
 // General Auth Routes
 Route::get('home', 'HomeController@index')->name('home');
 Route::get('profile', 'HomeController@profile')->name('profile');
-Route::get('setting', 'HomeController@setting')->name('setting');
+Route::get('pengaturan', 'HomeController@setting')->name('setting');
 
 // User Auth Routes
 Route::get('favorite', 'UserController@favorite')->name('liked');
 Route::get('status-lelang', 'UserController@status')->name('cart');
 
 // Admin Auth Routes
-Route::get('administrator', 'AdminController@liked')->name('administrator');
+Route::get('administrator', 'AdminController@dashboard')->name('admindashboard');
 

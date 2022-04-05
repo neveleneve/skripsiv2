@@ -1,7 +1,7 @@
 @extends('layouts.master')
 @section('title')
 <title>
-    Category
+    Kategori
 </title>
 @endsection
 
@@ -16,7 +16,7 @@
                             <strong>Lelangin</strong>Store
                         </a>
                     </li>
-                    <li class="breadcrumb-item active" aria-current="page">Category</li>
+                    <li class="breadcrumb-item active" aria-current="page">Kategori</li>
                 </ol>
             </nav>
         </div>

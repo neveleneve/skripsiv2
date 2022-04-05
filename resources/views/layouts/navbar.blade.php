@@ -43,15 +43,22 @@
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                         @if (Auth::user()->role == 'user')
-                        <li class="d-block d-lg-none" title="Item Favorit"><a class="dropdown-item" href="{{ route('liked') }}">Item Favorit</a></li>
-                        <li class="d-block d-lg-none" title="Status Lelang"><a class="dropdown-item" href="{{ route('cart') }}">Keranjang belanjamu</a></li>
+                        <li class="d-block d-lg-none"><a class="dropdown-item" href="{{ route('liked') }}">Item Favorit</a></li>
+                        <li class="d-block d-lg-none"><a class="dropdown-item" href="{{ route('cart') }}">Keranjang belanjamu</a></li>
                         @endif
-                        <li><a class="dropdown-item" href="{{ route('profile') }}">Profil</a></li>
-                        <li><a class="dropdown-item" href="{{ route('setting') }}">Setting</a></li>
+                        @if (Auth::user()->role == 'admin')
+                        <li>
+                            <a class="dropdown-item" href="{{ route('admindashboard') }}">
+                                Administrator
+                            </a>
+                        </li>
                         <li>
                             <hr class="dropdown-divider">
                         </li>
-                        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#exampleModal">Log Out</a></li>
+                        @endif
+                        <li><a class="dropdown-item" href="{{ route('profile') }}">Profil</a></li>
+                        <li><a class="dropdown-item" href="{{ route('setting') }}">Pengaturan</a></li>
+                        <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#exampleModal">Log Out</button></li>
                     </ul>
                 </li>
                 @else

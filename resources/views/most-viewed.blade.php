@@ -1,7 +1,7 @@
 @extends('layouts.master')
 @section('title')
 <title>
-    Most viewed
+    Sering Dilihat
 </title>
 @endsection
 
@@ -16,7 +16,7 @@
                             <strong>Lelangin</strong>Store
                         </a>
                     </li>
-                    <li class="breadcrumb-item active" aria-current="page">Most viewed</li>
+                    <li class="breadcrumb-item active" aria-current="page">Sering Dilihat</li>
                 </ol>
             </nav>
         </div>
