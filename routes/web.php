@@ -8,13 +8,13 @@ use Illuminate\Support\Facades\Route;
 // AdminController untuk user dengan role admin
 // UserController untuk user dengan role user
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('landing-page');
+Route::get('/', 'GeneralController@landing')->name('landing-page');
 // General Routes
 Route::get('most-viewed', 'GeneralController@mostviewed')->name('most-viewed');
 Route::get('category', 'GeneralController@category')->name('category');
 Route::get('brand', 'GeneralController@brand')->name('brand');
+Route::get('item/{id_item}', 'GeneralController@viewitem')->name('viewitem');
+Route::get('user/{username}', 'GeneralController@viewuser')->name('viewuser');
 
 Auth::routes();
 // General Auth Routes
@@ -28,4 +28,3 @@ Route::get('status-lelang', 'UserController@status')->name('cart');
 
 // Admin Auth Routes
 Route::get('administrator', 'AdminController@dashboard')->name('admindashboard');
-

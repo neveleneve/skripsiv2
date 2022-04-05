@@ -1,7 +1,7 @@
 @extends('layouts.master')
 @section('title')
     <title>
-        Items You Liked
+        Brand
     </title>
 @endsection
 
@@ -17,23 +17,10 @@
                                 <strong>Lelangin</strong>Store
                             </a>
                         </li>
-                        <li class="breadcrumb-item active" aria-current="page">Item Favorit</li>
+                        <li class="breadcrumb-item active" aria-current="page">Brand</li>
                     </ol>
                 </nav>
             </div>
         </div>
-        <div class="row">
-            <div class="col-12">
-                <h5><u>Item Favorit</u></h5>
-            </div>
-            <div class="col-12">
-                <hr>
-            </div>
-            <div class="col-12">
-                <h1 class="text-center">Daftar kosong</h1>
-            </div>
-        </div>
-
-
     </div>
 @endsection
