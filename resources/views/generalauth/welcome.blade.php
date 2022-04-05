@@ -7,7 +7,7 @@
 @endsection
 
 @section('content')
-    <div class="container">
+    <div class="container mb-5">
         <div class="row mt-5 pt-5 mb-3">
             <div class="col-12 ">
                 <ul class="nav nav-pills nav-fill border rounded-3 bg-light">
@@ -92,7 +92,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        @if ($counter == 5)
+                                        @if ($loop->index == 4)
                                             @php
                                                 break;
                                             @endphp
@@ -134,7 +134,7 @@
                                                 </div>
                                             </div>
                                         @endif
-                                        @if ($counter == 10)
+                                        @if ($loop->index == 9)
                                             @php
                                                 break;
                                             @endphp
@@ -176,7 +176,7 @@
                                                 </div>
                                             </div>
                                         @endif
-                                        @if ($counter == 15)
+                                        @if ($loop->index == 14)
                                             @php
                                                 break;
                                             @endphp
