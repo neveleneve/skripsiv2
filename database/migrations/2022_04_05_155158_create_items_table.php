@@ -22,6 +22,7 @@ class CreateItemsTable extends Migration
             $table->integer('tahun');
             $table->integer('open_bid');
             $table->integer('buyitnow');
+            $table->integer('seller_id');
             $table->timestamps();
         });
     }

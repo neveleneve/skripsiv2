@@ -85,8 +85,8 @@
                                                     </p>
                                                     <small>
                                                         <a class="text-dark"
-                                                            href="{{ route('viewuser', ['username' => 'username']) }}">
-                                                            username
+                                                            href="{{ route('viewuser', ['username' => $data->username]) }}">
+                                                            {{ $data->username }}
                                                         </a>
                                                     </small>
                                                 </div>
@@ -126,8 +126,8 @@
                                                         </p>
                                                         <small>
                                                             <a class="text-dark"
-                                                                href="{{ route('viewuser', ['username' => 'username']) }}">
-                                                                username
+                                                                href="{{ route('viewuser', ['username' => $data->username]) }}">
+                                                                {{ $data->username }}
                                                             </a>
                                                         </small>
                                                     </div>
@@ -168,8 +168,8 @@
                                                         </p>
                                                         <small>
                                                             <a class="text-dark"
-                                                                href="{{ route('viewuser', ['username' => 'username']) }}">
-                                                                username
+                                                                href="{{ route('viewuser', ['username' => $data->username]) }}">
+                                                                {{ $data->username }}
                                                             </a>
                                                         </small>
                                                     </div>

@@ -4,12 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Models\Item;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class GeneralController extends Controller
 {
     public function landing()
     {
-        $item = Item::get();
+        // $item = Item::orderBy('created_at', 'desc')->get();
+        $item = DB::table('items')
+            ->join('users', 'items.seller_id', 'users.id')
+            ->select('items.*', 'users.username')
+            ->get();
         return view('generalauth.welcome', [
             'items' => $item
         ]);
