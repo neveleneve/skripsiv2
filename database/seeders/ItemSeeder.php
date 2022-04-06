@@ -25,11 +25,13 @@ class ItemSeeder extends Seeder
                 'open_bid' => 10000000,
                 'buyitnow' => 230000000,
                 'seller_id' => 2,
+                'description' => 'Chevrolet Captiva tahun 2013. Mesin aman, bodi mulus.',
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')
             ],
         ]);
     }
+    
     public function generateRandomString($length)
     {
         $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';

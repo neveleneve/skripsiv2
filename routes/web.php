@@ -13,8 +13,8 @@ Route::get('/', 'GeneralController@landing')->name('landing-page');
 Route::get('most-viewed', 'GeneralController@mostviewed')->name('most-viewed');
 Route::get('category', 'GeneralController@category')->name('category');
 Route::get('brand', 'GeneralController@brand')->name('brand');
-Route::get('item/{id_item}', 'GeneralController@viewitem')->name('viewitem');
-Route::get('user/{username}', 'GeneralController@viewuser')->name('viewuser');
+Route::get('{username}/{id_item}', 'GeneralController@viewitem')->name('item.view');
+Route::get('/profile/{username}', 'GeneralController@viewuser')->name('viewuser');
 
 Auth::routes();
 // General Auth Routes

@@ -2,7 +2,7 @@
 
 @section('title')
     <title>
-        Landing Page
+        Situs Lelang Mobil - LelanginStore
     </title>
 @endsection
 
@@ -71,18 +71,18 @@
                                     @foreach ($items as $data)
                                         <div class="col-2">
                                             <div class="card">
-                                                <a href="{{ route('viewitem', ['id_item' => $data->item_id]) }}">
+                                                <a
+                                                    href="{{ route('item.view', ['username' => $data->username, 'id_item' => $data->item_id]) }}">
                                                     <img class="card-img-top img-fluid"
                                                         src="{{ file_exists('img/items/' . $data->item_id . '-1.png')? asset('img/items/' . $data->item_id . '-1.png'): asset('img/items/default.png') }}"
                                                         alt="">
                                                 </a>
                                                 <div class="card-body">
-                                                    <p>
-                                                        <a class="fs-6 text-dark text-decoration-none"
-                                                            href="{{ route('viewitem', ['id_item' => $data->item_id]) }}">
-                                                            {{ $data->name }}
-                                                        </a>
-                                                    </p>
+                                                    <a class="fs-6 text-dark text-decoration-none fw-bold"
+                                                        href="{{ route('item.view', ['username' => $data->username, 'id_item' => $data->item_id]) }}">
+                                                        {{ $data->name }}
+                                                    </a>
+                                                    <br>
                                                     <small>
                                                         <a class="text-dark"
                                                             href="{{ route('viewuser', ['username' => $data->username]) }}">
@@ -112,18 +112,18 @@
                                         @if ($loop->index >= 5 && $loop->index <= 9)
                                             <div class="col-2">
                                                 <div class="card">
-                                                    <a href="{{ route('viewitem', ['id_item' => $data->item_id]) }}">
+                                                    <a
+                                                        href="{{ route('item.view', ['username' => $data->username, 'id_item' => $data->item_id]) }}">
                                                         <img class="card-img-top img-fluid"
                                                             src="{{ file_exists('img/items/' . $data->item_id . '-1.png')? asset('img/items/' . $data->item_id . '-1.png'): asset('img/items/default.png') }}"
                                                             alt="">
                                                     </a>
                                                     <div class="card-body">
-                                                        <p>
-                                                            <a class="fs-6 text-dark text-decoration-none"
-                                                                href="{{ route('viewitem', ['id_item' => $data->item_id]) }}">
-                                                                {{ $data->name }}
-                                                            </a>
-                                                        </p>
+                                                        <a class="fs-6 text-dark text-decoration-none fw-bold"
+                                                            href="{{ route('item.view', ['username' => $data->username, 'id_item' => $data->item_id]) }}">
+                                                            {{ $data->name }}
+                                                        </a>
+                                                        <br>
                                                         <small>
                                                             <a class="text-dark"
                                                                 href="{{ route('viewuser', ['username' => $data->username]) }}">
@@ -154,18 +154,18 @@
                                         @if ($loop->index >= 10 && $loop->index <= 14)
                                             <div class="col-2">
                                                 <div class="card">
-                                                    <a href="{{ route('viewitem', ['id_item' => $data->item_id]) }}">
+                                                    <a
+                                                        href="{{ route('item.view', ['username' => $data->username, 'id_item' => $data->item_id]) }}">
                                                         <img class="card-img-top img-fluid"
                                                             src="{{ file_exists('img/items/' . $data->item_id . '-1.png')? asset('img/items/' . $data->item_id . '-1.png'): asset('img/items/default.png') }}"
                                                             alt="">
                                                     </a>
                                                     <div class="card-body">
-                                                        <p>
-                                                            <a class="fs-6 text-dark text-decoration-none"
-                                                                href="{{ route('viewitem', ['id_item' => $data->item_id]) }}">
-                                                                {{ $data->name }}
-                                                            </a>
-                                                        </p>
+                                                        <a class="fs-6 text-dark text-decoration-none fw-bold"
+                                                            href="{{ route('item.view', ['username' => $data->username, 'id_item' => $data->item_id]) }}">
+                                                            {{ $data->name }}
+                                                        </a>
+                                                        <br>
                                                         <small>
                                                             <a class="text-dark"
                                                                 href="{{ route('viewuser', ['username' => $data->username]) }}">
