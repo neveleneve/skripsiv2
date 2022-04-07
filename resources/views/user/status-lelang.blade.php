@@ -20,6 +20,7 @@
                         <li class="breadcrumb-item active" aria-current="page">Status Lelang</li>
                     </ol>
                 </nav>
+                <hr>
             </div>
         </div>
         <div class="row">

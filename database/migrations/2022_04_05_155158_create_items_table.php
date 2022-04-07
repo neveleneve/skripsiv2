@@ -24,6 +24,7 @@ class CreateItemsTable extends Migration
             $table->integer('buyitnow');
             $table->integer('seller_id');
             $table->longText('description');
+            $table->dateTime('end_time');
             $table->timestamps();
         });
     }

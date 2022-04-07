@@ -85,7 +85,7 @@
                                                     <br>
                                                     <small>
                                                         <a class="text-dark"
-                                                            href="{{ route('viewuser', ['username' => $data->username]) }}">
+                                                            href="{{ route('user.view', ['username' => $data->username]) }}">
                                                             {{ $data->username }}
                                                         </a>
                                                     </small>
@@ -126,7 +126,7 @@
                                                         <br>
                                                         <small>
                                                             <a class="text-dark"
-                                                                href="{{ route('viewuser', ['username' => $data->username]) }}">
+                                                                href="{{ route('user.view', ['username' => $data->username]) }}">
                                                                 {{ $data->username }}
                                                             </a>
                                                         </small>
@@ -168,7 +168,7 @@
                                                         <br>
                                                         <small>
                                                             <a class="text-dark"
-                                                                href="{{ route('viewuser', ['username' => $data->username]) }}">
+                                                                href="{{ route('user.view', ['username' => $data->username]) }}">
                                                                 {{ $data->username }}
                                                             </a>
                                                         </small>

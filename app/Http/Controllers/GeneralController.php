@@ -33,8 +33,24 @@ class GeneralController extends Controller
         if ($cekdata == 1) {
             $data = DB::table('items')
                 ->join('users', 'items.seller_id', 'users.id')
-                ->select('items.*', 'users.username')
+                ->join('brands', 'items.brand', 'brands.id')
+                ->join('categories', 'items.category', 'categories.id')
+                ->select('items.*', 'users.username', 'brands.name as brand_name', 'categories.name as category_name')
+                ->where([
+                    'items.item_id' => $id_item,
+                    'users.username' => $username,
+                ])
                 ->get();
+            $datapenawaran = DB::table('offers')
+                ->join('users', 'offers.id_seller', 'users.id')
+                ->join('items', 'offers.id_item', 'items.item_id')
+                ->select('offers.*')
+                ->where([
+                    'items.item_id' => $id_item,
+                    'users.username' => $username,
+                ])
+                ->get();
+                // dd($datapenawaran);
         } elseif ($cekdata > 1) {
             Alert::alert('Aww Crap!', 'Terjadi kesalahan ketika membuka halaman item!', 'danger');
             return redirect(route('landing-page'));
@@ -43,7 +59,8 @@ class GeneralController extends Controller
             return redirect(route('landing-page'));
         }
         return view('general.view_item', [
-            'item' => $data
+            'item' => $data,
+            'penawaran' => $datapenawaran,
         ]);
     }
     public function viewuser($username)

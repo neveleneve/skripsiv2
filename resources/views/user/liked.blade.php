@@ -20,14 +20,12 @@
                         <li class="breadcrumb-item active" aria-current="page">Item Favorit</li>
                     </ol>
                 </nav>
+                <hr>
             </div>
         </div>
         <div class="row">
             <div class="col-12">
                 <h5><u>Item Favorit</u></h5>
-            </div>
-            <div class="col-12">
-                <hr>
             </div>
             <div class="col-12">
                 <h1 class="text-center">Daftar kosong</h1>

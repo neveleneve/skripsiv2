@@ -21,5 +21,8 @@ class HomeController extends Controller
     public function setting()
     {
     }
-    
+    public function penawaran($username, $id_item)
+    {
+        echo 'penawaran barang lelang dari item ' . $id_item . ' oleh ' . $username;
+    }
 }
