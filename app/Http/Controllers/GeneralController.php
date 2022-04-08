@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Item;
+use App\Models\Offer;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -50,7 +52,8 @@ class GeneralController extends Controller
                     'users.username' => $username,
                 ])
                 ->get();
-                // dd($datapenawaran);
+            $cekdataakun = Offer::where('id_penawar', Auth::user()->id)->select('offer_code')->get();
+            // dd($datapenawaran);
         } elseif ($cekdata > 1) {
             Alert::alert('Aww Crap!', 'Terjadi kesalahan ketika membuka halaman item!', 'danger');
             return redirect(route('landing-page'));
@@ -61,6 +64,7 @@ class GeneralController extends Controller
         return view('general.view_item', [
             'item' => $data,
             'penawaran' => $datapenawaran,
+            'cekpenawaran' => $cekdataakun,
         ]);
     }
     public function viewuser($username)

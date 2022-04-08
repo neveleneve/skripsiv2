@@ -20,4 +20,8 @@ class UserController extends Controller
     {
         return view('user.status-lelang');
     }
+    public function viewstatus()
+    {
+        # code...
+    }
 }

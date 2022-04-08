@@ -13,7 +13,7 @@ Route::get('/', 'GeneralController@landing')->name('landing-page');
 Route::get('most-viewed', 'GeneralController@mostviewed')->name('most-viewed');
 Route::get('tipe', 'GeneralController@category')->name('category');
 Route::get('brand', 'GeneralController@brand')->name('brand');
-Route::get('{username}/{id_item}', 'GeneralController@viewitem')->name('item.view');
+Route::get('/item/{username}/{id_item}', 'GeneralController@viewitem')->name('item.view');
 Route::get('/profile/{username}', 'GeneralController@viewuser')->name('user.view');
 
 Auth::routes();
@@ -26,6 +26,7 @@ Route::get('{username}/{id_item}/penawaran', 'HomeController@penawaran')->name('
 // User Auth Routes
 Route::get('favorite', 'UserController@favorite')->name('liked');
 Route::get('status-lelang', 'UserController@status')->name('cart');
+Route::get('status-lelang/{offer_code}', 'UserController@viewstatus')->name('view.cart');
 
 // Admin Auth Routes
 Route::get('administrator', 'AdminController@dashboard')->name('admindashboard');

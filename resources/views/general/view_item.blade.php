@@ -7,6 +7,7 @@
 @endsection
 
 @section('content')
+    @include('function.func')
     <div class="container mb-5">
         <div class="row justify-content-center mt-5 pt-5 mb-3">
             <div class="col-12">
@@ -140,9 +141,16 @@
                                                 Lihat Penawaran Lelang
                                             </a>
                                         @else
-                                            <button class="btn btn-outline-success fw-bold">
-                                                Ikuti Lelang
-                                            </button>
+                                            @if (count($cekpenawaran) > 0)
+                                                <a href="{{ route('view.cart', ['offer_code' => $cekpenawaran[0]['offer_code']]) }}"
+                                                    class="btn btn-outline-success fw-bold">
+                                                    Lihat Transaksi
+                                                </a>
+                                            @else
+                                                <button class="btn btn-outline-success fw-bold">
+                                                    Ikuti Lelang
+                                                </button>
+                                            @endif
                                         @endif
                                     @else
                                         <a href="{{ route('item.penawaran', ['username' => $item[0]->username, 'id_item' => $item[0]->item_id]) }}"
@@ -188,13 +196,13 @@
                                         <td>{{ $item->offer_code }}</td>
                                         <td>
                                             @if ($item->offer_type == 'lelang')
-                                            Penawaran Lelang
+                                                Penawaran Lelang
                                             @elseif ($item->offer_type == 'lelang')
-                                            Beli Langsung
+                                                Beli Langsung
                                             @endif
                                         </td>
-                                        <td>Rp. {{ number_format($item->offer_price, 0, ',','.') }}</td>
-                                        <td>{{ date('d M Y H:i:s',strtotime($item->created_at)) }}</td>
+                                        <td>Rp. {{ number_format($item->offer_price, 0, ',', '.') }}</td>
+                                        <td>{{ time_elapsed_string($item->created_at) }}</td>
                                     </tr>
                                 @empty
                                 @endforelse
