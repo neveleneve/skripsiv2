@@ -52,7 +52,11 @@ class GeneralController extends Controller
                     'users.username' => $username,
                 ])
                 ->get();
-            $cekdataakun = Offer::where('id_penawar', Auth::user()->id)->select('offer_code')->get();
+                if (isset(Auth::user()->id)) {
+                    $cekdataakun = Offer::where('id_penawar', Auth::user()->id)->select('offer_code')->get();
+                }else {
+                    $cekdataakun = null;
+                }
             // dd($datapenawaran);
         } elseif ($cekdata > 1) {
             Alert::alert('Aww Crap!', 'Terjadi kesalahan ketika membuka halaman item!', 'danger');
@@ -79,8 +83,16 @@ class GeneralController extends Controller
     {
         return view('general.brand');
     }
+    public function viewbrand()
+    {
+        echo 'view brand';
+    }
     public function category()
     {
         return view('general.category');
+    }
+    public function viewcategory()
+    {
+        echo 'view tipe';
     }
 }

@@ -9,17 +9,17 @@ function time_elapsed_string($datetime, $full = false)
     $diff->d -= $diff->w * 7;
 
     $string = [
-        'y' => 'year',
-        'm' => 'month',
-        'w' => 'week',
-        'd' => 'day',
-        'h' => 'hour',
-        'i' => 'minute',
-        's' => 'second',
+        'y' => 'tahun',
+        'm' => 'bulan',
+        'w' => 'minggu',
+        'd' => 'hari',
+        'h' => 'jam',
+        'i' => 'menit',
+        's' => 'detik',
     ];
     foreach ($string as $k => &$v) {
         if ($diff->$k) {
-            $v = $diff->$k . ' ' . $v . ($diff->$k > 1 ? 's' : '');
+            $v = $diff->$k . ' ' . $v . ($diff->$k > 1 ? '' : '');
         } else {
             unset($string[$k]);
         }
@@ -28,6 +28,6 @@ function time_elapsed_string($datetime, $full = false)
     if (!$full) {
         $string = array_slice($string, 0, 1);
     }
-    return $string ? implode(', ', $string) . ' ago' : 'just now';
+    return $string ? implode(', ', $string) . ' yang lalu' : 'baru saja';
 }
 @endphp

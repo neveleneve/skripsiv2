@@ -21,7 +21,7 @@ class LoginController extends Controller
 
     protected function authenticated(Request $request, $user)
     {
-        Alert::alert('Yeay!!!', 'Kamu berhasil masuk!', 'success');
+        alert('Yeay!!!', 'Kamu berhasil masuk!', 'success')->showConfirmButton('OK', '#198754')->autoClose(2000);
         return redirect()->intended($this->redirectPath());
     }
 

@@ -97,7 +97,12 @@
                                 <div class="card">
                                     <div class="card-body bg-light">
                                         <p class="card-text m-0 text-success"><strong>Brand</strong></p>
-                                        <p class="card-text m-0">{{ $item[0]->brand_name }}</p>
+                                        <p class="card-text m-0">
+                                            <a class="text-dark" target="__blank" title="Lihat Tipe {{ $item[0]->brand_name }}"
+                                                href="{{ route('view.brand', ['name' => $item[0]->brand_name]) }}">
+                                                {{ $item[0]->brand_name }}
+                                            </a>
+                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -105,7 +110,12 @@
                                 <div class="card">
                                     <div class="card-body bg-light">
                                         <p class="card-text m-0 text-success"><strong>Tipe</strong></p>
-                                        <p class="card-text m-0">{{ $item[0]->category_name }}</p>
+                                        <p class="card-text m-0">
+                                            <a class="text-dark" target="__blank" title="Lihat Brand {{ $item[0]->category_name }}"
+                                                href="{{ route('view.category', ['name' => $item[0]->category_name]) }}">
+                                                {{ $item[0]->category_name }}
+                                            </a>
+                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -175,15 +185,15 @@
                     <div class="card-header text-center bg-light text-success">
                         <h4 class="fw-bold">Penawaran</h4>
                     </div>
-                    <div class="card-body">
-                        <table class="table table-hover table-bordered">
+                    <div class="card-body table-responsive">
+                        <table class="table table-hover table-bordered text-nowrap text-center">
                             <thead class="bg-success text-light">
                                 <tr>
                                     <th>No</th>
                                     <th>Kode Penawaran</th>
                                     <th>Tipe Penawaran</th>
                                     <th>Harga Penawaran</th>
-                                    <th>Tanggal Penawaran</th>
+                                    <th>Waktu Penawaran</th>
                                 </tr>
                             </thead>
                             <tbody>
