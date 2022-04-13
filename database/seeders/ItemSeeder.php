@@ -16,7 +16,8 @@ class ItemSeeder extends Seeder
     public function run()
     {
         // example data
-        $item_id = $this->generateRandomString(10);
+        // $item_id = $this->generateRandomString(10);
+        $item_id = 'JVE3BEI45J';
         Item::insert([
             'item_id' => $item_id,
             'name' => 'Chevrolet Captiva 2013',
@@ -31,15 +32,26 @@ class ItemSeeder extends Seeder
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s')
         ]);
-        Offer::insert([
-            'offer_code' => $this->generateRandomString(15),
+        $created_at = date('Y-m-d H:i:s');
+        $offer_code = [
+            'previous_offer_code' => null,
             'id_penawar' => 3,
             'id_seller' => 2,
             'id_item' => $item_id,
             'offer_price' => '25000000',
-            'offer_type' => 'lelang',
-            'created_at' => date('Y-m-d H:i:s'),
-            'updated_at' => date('Y-m-d H:i:s')
+            'offer_type' => 'bid',
+            'created_at' => $created_at,
+        ];
+        Offer::insert([
+            'offer_code' => hash('md2', serialize($offer_code)),
+            'id_penawar' => 3,
+            'id_seller' => 2,
+            'id_item' => $item_id,
+            'offer_price' => '25000000',
+            'offer_type' => 'bid',
+            'order_status' => 'initiate',
+            'created_at' => $created_at,
+            'updated_at' => $created_at
         ]);
     }
 

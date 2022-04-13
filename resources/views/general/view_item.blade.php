@@ -98,8 +98,9 @@
                                     <div class="card-body bg-light">
                                         <p class="card-text m-0 text-success"><strong>Brand</strong></p>
                                         <p class="card-text m-0">
-                                            <a class="text-dark" target="__blank" title="Lihat Tipe {{ $item[0]->brand_name }}"
-                                                href="{{ route('view.brand', ['name' => $item[0]->brand_name]) }}">
+                                            <a class="text-dark text-decoration-none" target="__blank"
+                                                title="Lihat Tipe {{ $item[0]->brand_name }}"
+                                                href="{{ route('view.brand', ['name' => strtolower($item[0]->brand_name)]) }}">
                                                 {{ $item[0]->brand_name }}
                                             </a>
                                         </p>
@@ -111,8 +112,9 @@
                                     <div class="card-body bg-light">
                                         <p class="card-text m-0 text-success"><strong>Tipe</strong></p>
                                         <p class="card-text m-0">
-                                            <a class="text-dark" target="__blank" title="Lihat Brand {{ $item[0]->category_name }}"
-                                                href="{{ route('view.category', ['name' => $item[0]->category_name]) }}">
+                                            <a class="text-dark text-decoration-none" target="__blank"
+                                                title="Lihat Tipe {{ $item[0]->category_name }}"
+                                                href="{{ route('view.category', ['name' => strtolower($item[0]->category_name)]) }}">
                                                 {{ $item[0]->category_name }}
                                             </a>
                                         </p>
@@ -125,8 +127,9 @@
                                 <div class="card">
                                     <div class="card-body bg-light">
                                         <p class="card-text m-0 text-success"><strong>Harga Awal Lelang</strong></p>
-                                        <p class="card-text m-0">Rp.
-                                            {{ number_format($item[0]->open_bid, 0, ',', '.') }}</p>
+                                        <p class="card-text m-0">
+                                            Rp. {{ number_format($item[0]->open_bid, 0, ',', '.') }}
+                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -134,8 +137,9 @@
                                 <div class="card">
                                     <div class="card-body bg-light">
                                         <p class="card-text m-0 text-success"><strong>Harga Beli Langsung</strong></p>
-                                        <p class="card-text m-0">Rp.
-                                            {{ number_format($item[0]->buyitnow, 0, ',', '.') }}</p>
+                                        <p class="card-text m-0">
+                                            Rp. {{ number_format($item[0]->buyitnow, 0, ',', '.') }}
+                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -147,29 +151,65 @@
                                     @if (Auth::user()->role == 'user')
                                         @if (Auth::user()->username == $item[0]->username)
                                             <a href="{{ route('item.penawaran', ['username' => $item[0]->username, 'id_item' => $item[0]->item_id]) }}"
-                                                class="btn btn-outline-success fw-bold">
+                                                class="btn btn-sm btn-outline-success fw-bold">
                                                 Lihat Penawaran Lelang
                                             </a>
                                         @else
                                             @if (count($cekpenawaran) > 0)
                                                 <a href="{{ route('view.cart', ['offer_code' => $cekpenawaran[0]['offer_code']]) }}"
-                                                    class="btn btn-outline-success fw-bold">
+                                                    class="btn btn-sm btn-outline-success fw-bold" target="__blank">
                                                     Lihat Transaksi
                                                 </a>
                                             @else
-                                                <button class="btn btn-outline-success fw-bold">
+                                                <button class="btn btn-sm btn-outline-success fw-bold" type="button"
+                                                    data-bs-toggle="modal" data-bs-target="#modalikutlelang">
                                                     Ikuti Lelang
                                                 </button>
+                                                {{-- modal mengikuti lelang --}}
+                                                <div class="modal fade" id="modalikutlelang" tabindex="-1"
+                                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="exampleModalLabel">
+                                                                    Penawaran Lelang
+                                                                </h5>
+                                                                <button type="button" class="btn-close"
+                                                                    data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <label class="fw-bold" for="jenis">Jenis
+                                                                    Penawaran</label>
+                                                                <select name="jenis" id="jenis"
+                                                                    class="form-control form-control-sm">
+                                                                    <option value="bid">Lelang</option>
+                                                                    <option value="buy">Beli Langsung</option>
+                                                                </select>
+
+                                                                {{-- soon --}}
+                                                                <small>Harga penawaran lelang tertinggi saat ini adalah
+                                                                    :</small>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-outline-success"
+                                                                    data-bs-dismiss="modal">Batal</button>
+                                                                <button type="button" class="btn btn-success">
+                                                                    Lanjutkan
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             @endif
                                         @endif
                                     @else
                                         <a href="{{ route('item.penawaran', ['username' => $item[0]->username, 'id_item' => $item[0]->item_id]) }}"
-                                            class="btn btn-outline-success fw-bold">
+                                            class="btn btn-sm btn-outline-success fw-bold">
                                             Lihat Penawaran Lelang
                                         </a>
                                     @endif
                                 @else
-                                    <a href="{{ route('login') }}" class="btn btn-outline-success fw-bold">
+                                    <a href="{{ route('login') }}" class="btn btn-sm btn-outline-success fw-bold">
                                         Masuk Untuk Ikuti Lelang
                                     </a>
                                 @endauth
@@ -203,18 +243,25 @@
                                 @forelse ($penawaran as $item)
                                     <tr>
                                         <td>{{ $no++ }}</td>
-                                        <td>{{ $item->offer_code }}</td>
+                                        <td>{{ strtoupper($item->offer_code) }}</td>
                                         <td>
-                                            @if ($item->offer_type == 'lelang')
+                                            @if ($item->offer_type == 'bid')
                                                 Penawaran Lelang
-                                            @elseif ($item->offer_type == 'lelang')
+                                            @elseif ($item->offer_type == 'buy')
                                                 Beli Langsung
                                             @endif
                                         </td>
-                                        <td>Rp. {{ number_format($item->offer_price, 0, ',', '.') }}</td>
+                                        <td>
+                                            Rp. {{ number_format($item->offer_price, 0, ',', '.') }}
+                                        </td>
                                         <td>{{ time_elapsed_string($item->created_at) }}</td>
                                     </tr>
                                 @empty
+                                    <tr>
+                                        <td colspan="5">
+                                            <h3 class="text-center text-success">Belum ada penawaran</h3>
+                                        </td>
+                                    </tr>
                                 @endforelse
                             </tbody>
                         </table>

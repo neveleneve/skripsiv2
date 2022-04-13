@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Brand;
 use App\Models\Item;
 use App\Models\Offer;
 use Illuminate\Http\Request;
@@ -50,12 +51,13 @@ class GeneralController extends Controller
                 ->where([
                     'items.item_id' => $id_item,
                     'users.username' => $username,
+                    'offers.order_status' => 'done',
                 ])
                 ->get();
                 if (isset(Auth::user()->id)) {
                     $cekdataakun = Offer::where('id_penawar', Auth::user()->id)->select('offer_code')->get();
                 }else {
-                    $cekdataakun = null;
+                    $cekdataakun = 0;
                 }
             // dd($datapenawaran);
         } elseif ($cekdata > 1) {
@@ -83,9 +85,10 @@ class GeneralController extends Controller
     {
         return view('general.brand');
     }
-    public function viewbrand()
+    public function viewbrand($name)
     {
-        echo 'view brand';
+        $data = Brand::where('name', $name)->get();
+        dd($data);
     }
     public function category()
     {

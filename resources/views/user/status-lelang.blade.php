@@ -49,9 +49,9 @@
                                     </a>
                                 </td>
                                 <td>
-                                    @if ($item->offer_type == 'lelang')
+                                    @if ($item->offer_type == 'bid')
                                         Penawaran Lelang
-                                    @elseif ($item->offer_type == 'lelang')
+                                    @elseif ($item->offer_type == 'buy')
                                         Beli Langsung
                                     @endif
                                 </td>
