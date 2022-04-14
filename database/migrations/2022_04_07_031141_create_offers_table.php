@@ -25,7 +25,7 @@ class CreateOffersTable extends Migration
             // initiate => user has insert their offer price on item page. if its done, they directly go to payment page to do payment.
             // payment => user is doing their payment to the product, system will check if payment is done by API from 3rd party payment gateway.
             // done => user has done their payment to the product, checking by 3rd party payment gateway.
-            $table->enum('order_status', ['initiate', 'payment', 'done']);
+            $table->enum('order_status', ['initiate', 'payment', 'done', 'cancel']);
             $table->timestamps();
         });
     }

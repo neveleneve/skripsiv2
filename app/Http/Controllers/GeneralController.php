@@ -38,7 +38,7 @@ class GeneralController extends Controller
                 ->join('users', 'items.seller_id', 'users.id')
                 ->join('brands', 'items.brand', 'brands.id')
                 ->join('categories', 'items.category', 'categories.id')
-                ->select('items.*', 'users.username', 'brands.name as brand_name', 'categories.name as category_name')
+                ->select('items.*', 'users.username', 'users.id', 'brands.name as brand_name', 'categories.name as category_name')
                 ->where([
                     'items.item_id' => $id_item,
                     'users.username' => $username,
@@ -53,12 +53,13 @@ class GeneralController extends Controller
                     'users.username' => $username,
                     'offers.order_status' => 'done',
                 ])
+                ->orderBy('offer_price', 'desc')
                 ->get();
-                if (isset(Auth::user()->id)) {
-                    $cekdataakun = Offer::where('id_penawar', Auth::user()->id)->select('offer_code')->get();
-                }else {
-                    $cekdataakun = 0;
-                }
+            if (isset(Auth::user()->id)) {
+                $cekdataakun = Offer::where('id_penawar', Auth::user()->id)->select('offer_code')->get();
+            } else {
+                $cekdataakun = 0;
+            }
             // dd($datapenawaran);
         } elseif ($cekdata > 1) {
             Alert::alert('Aww Crap!', 'Terjadi kesalahan ketika membuka halaman item!', 'danger');
@@ -76,6 +77,9 @@ class GeneralController extends Controller
     public function viewuser($username)
     {
         echo $username;
+        if ($username == 'status-lelang') {
+            return redirect(route('cart'));
+        }
     }
     public function mostviewed()
     {

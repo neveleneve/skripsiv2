@@ -18,6 +18,11 @@
                                 <strong>Lelangin</strong>Store
                             </a>
                         </li>
+                        <li class="breadcrumb-item" aria-current="page">
+                            <a class="text-success" href="{{ route('profile') }}">
+                                {{ Auth::user()->username }}
+                            </a>
+                        </li>
                         <li class="breadcrumb-item active" aria-current="page">Status Lelang</li>
                     </ol>
                 </nav>
@@ -28,24 +33,26 @@
                 <h4 class="text-success"><u>Status Lelang</u></h4>
                 <hr>
             </div>
-            <div class="col-12">
+            <div class="col-12 table-responsive">
                 <table class="table table-hover table-bordered text-nowrap text-center">
                     <thead class="bg-success text-light">
                         <tr>
-                            <th>No</th>
+                            {{-- <th>No</th> --}}
                             <th>Kode Penawaran</th>
                             <th>Tipe Penawaran</th>
                             <th>Harga Penawaran</th>
+                            <th>Status Pembayaran</th>
                             <th>Waktu Penawaran</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse ($data as $item)
                             <tr>
-                                <td>{{ $no++ }}</td>
+                                {{-- <td>{{ $no++ }}</td> --}}
                                 <td>
-                                    <a class="text-dark" href="{{ route('view.cart', ['offer_code' => $item->offer_code]) }}">
-                                        {{ $item->offer_code }}
+                                    <a class="text-dark text-decoration-none" target="___blank"
+                                        href="{{ route('view.cart', ['offer_code' => $item->offer_code]) }}">
+                                        {{ strtoupper($item->offer_code) }}
                                     </a>
                                 </td>
                                 <td>
@@ -56,13 +63,41 @@
                                     @endif
                                 </td>
                                 <td>Rp. {{ number_format($item->offer_price, 0, ',', '.') }}</td>
-                                <td>{{ time_elapsed_string($item->created_at) }}</td>
+                                <td>
+                                    @if ($item->order_status == 'initiate')
+                                        <p class="m-0">
+                                            Belum ada pembayaran
+                                            <small>
+                                                <i title="Pesanan baru masuk. Belum melakukan pembayaran!"
+                                                    class="bi-exclamation-circle text-success pe-auto"></i>
+                                            </small>
+                                        </p>
+                                    @elseif ($item->order_status == 'payment')
+                                        <p class="m-0">
+                                            Menunggu status pembayaran
+                                            <small>
+                                                <i title="Pembayaran berhasil dilakukan! Menunggu pembaruan."
+                                                    class="bi-exclamation-circle text-success pe-auto"></i>
+                                            </small>
+                                        </p>
+                                    @elseif($item->order_status == 'done')
+                                        <p class="m-0">
+                                            Selesai
+                                            <small>
+                                                <i title="Pesanan selesai!"
+                                                    class="bi-exclamation-circle text-success pe-auto"></i>
+                                            </small>
+                                        </p>
+                                    @endif
+                                </td>
+                                <td>{{ time_elapsed_string($item->created_at) }} <i class="bi-exclamation-circle"
+                                        title="{{ date('d M Y H:i', strtotime($item->created_at)) }}"></i></td>
                             </tr>
                         @empty
                             <tr>
                                 <td colspan="5">
                                     <h2 class="text-success">
-                                        Data Kosong
+                                        Tidak ada penawaran
                                     </h2>
                                 </td>
                             </tr>

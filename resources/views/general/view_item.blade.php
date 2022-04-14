@@ -177,26 +177,49 @@
                                                                 <button type="button" class="btn-close"
                                                                     data-bs-dismiss="modal" aria-label="Close"></button>
                                                             </div>
-                                                            <div class="modal-body">
-                                                                <label class="fw-bold" for="jenis">Jenis
-                                                                    Penawaran</label>
-                                                                <select name="jenis" id="jenis"
-                                                                    class="form-control form-control-sm">
-                                                                    <option value="bid">Lelang</option>
-                                                                    <option value="buy">Beli Langsung</option>
-                                                                </select>
-
-                                                                {{-- soon --}}
-                                                                <small>Harga penawaran lelang tertinggi saat ini adalah
-                                                                    :</small>
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                <button type="button" class="btn btn-outline-success"
-                                                                    data-bs-dismiss="modal">Batal</button>
-                                                                <button type="button" class="btn btn-success">
-                                                                    Lanjutkan
-                                                                </button>
-                                                            </div>
+                                                            <form action="{{ route('penawaran') }}" method="post">
+                                                                {{ csrf_field() }}
+                                                                <input type="hidden" name="user_id"
+                                                                    value="{{ Auth::user()->id }}">
+                                                                <input type="hidden" name="item_id"
+                                                                    value="{{ $item[0]->item_id }}">
+                                                                <input type="hidden" name="nama_penjual"
+                                                                    value="{{ $item[0]->username }}">
+                                                                <input type="hidden" name="id_penjual"
+                                                                    value="{{ $item[0]->id }}">
+                                                                <div class="modal-body">
+                                                                    <label class="fw-bold" for="jenis">Jenis
+                                                                        Penawaran</label>
+                                                                    <select name="jenis" id="jenis"
+                                                                        class="form-control form-control-sm mb-3">
+                                                                        <option value="bid">Lelang</option>
+                                                                        <option value="buy">Beli Langsung</option>
+                                                                    </select>
+                                                                    <label class="fw-bold" for="harga">Harga
+                                                                        Penawaran</label>
+                                                                    <input type="number" class="form-control form-control-sm"
+                                                                        name="harga" id="harga" step="1000000"
+                                                                        min="{{ count($penawaran) == 0 ? $item[0]->open_bid : $penawaran[0]['offer_price'] + 1000000 }}"
+                                                                        value="{{ count($penawaran) == 0 ? $item[0]->open_bid : $penawaran[0]['offer_price'] + 1000000 }}">
+                                                                    <small>- Minimal penawaran lelang :
+                                                                        {{ count($penawaran) == 0? 'Rp. ' . number_format($item[0]->open_bid, 0, ',', '.'): 'Rp. ' . $penawaran[0]['offer_price'] }}</small>
+                                                                    @if (count($penawaran) != 0)
+                                                                        <br>
+                                                                        <small>
+                                                                            - Harga penawaran tertinggi :
+                                                                            Rp.
+                                                                            {{ number_format($penawaran[0]['offer_price'], 0, ',', '.') }}
+                                                                        </small>
+                                                                    @endif
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-outline-success"
+                                                                        data-bs-dismiss="modal">Batal</button>
+                                                                    <button type="submit" class="btn btn-success">
+                                                                        Lanjutkan
+                                                                    </button>
+                                                                </div>
+                                                            </form>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -254,7 +277,10 @@
                                         <td>
                                             Rp. {{ number_format($item->offer_price, 0, ',', '.') }}
                                         </td>
-                                        <td>{{ time_elapsed_string($item->created_at) }}</td>
+                                        <td>
+                                            {{ time_elapsed_string($item->created_at) }} <i class="bi-exclamation-circle"
+                                                title="{{ date('d M Y H:i', strtotime($item->created_at)) }}"></i>
+                                        </td>
                                     </tr>
                                 @empty
                                     <tr>
