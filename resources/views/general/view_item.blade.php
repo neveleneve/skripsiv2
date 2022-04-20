@@ -188,27 +188,38 @@
                                                                 <input type="hidden" name="id_penjual"
                                                                     value="{{ $item[0]->id }}">
                                                                 <div class="modal-body">
-                                                                    <label class="fw-bold" for="jenis">Jenis
-                                                                        Penawaran</label>
+                                                                    <label class="fw-bold" for="jenis">
+                                                                        Jenis Penawaran
+                                                                    </label>
                                                                     <select name="jenis" id="jenis"
                                                                         class="form-control form-control-sm mb-3">
                                                                         <option value="bid">Lelang</option>
                                                                         <option value="buy">Beli Langsung</option>
                                                                     </select>
-                                                                    <label class="fw-bold" for="harga">Harga
-                                                                        Penawaran</label>
+                                                                    <label class="fw-bold" for="harga">
+                                                                        Harga Penawaran
+                                                                    </label>
                                                                     <input type="number" class="form-control form-control-sm"
                                                                         name="harga" id="harga" step="1000000"
-                                                                        min="{{ count($penawaran) == 0 ? $item[0]->open_bid : $penawaran[0]['offer_price'] + 1000000 }}"
-                                                                        value="{{ count($penawaran) == 0 ? $item[0]->open_bid : $penawaran[0]['offer_price'] + 1000000 }}">
-                                                                    <small>- Minimal penawaran lelang :
-                                                                        {{ count($penawaran) == 0? 'Rp. ' . number_format($item[0]->open_bid, 0, ',', '.'): 'Rp. ' . $penawaran[0]['offer_price'] }}</small>
+                                                                        {{-- min="{{ count($penawaran) == 0 ? $item[0]->open_bid : $penawaran[0]['offer_price'] }}"
+                                                                        value="{{ count($penawaran) == 0 ? $item[0]->open_bid : $penawaran[0]['offer_price'] }}" --}}
+                                                                        min="{{ count($penawaran) == 0 ? $item[0]->open_bid : $penawaran[0]->offer_price }}"
+                                                                        value="{{ count($penawaran) == 0 ? $item[0]->open_bid : $penawaran[0]->offer_price + 1000000 }}">
+                                                                    <small>
+                                                                        - Penawaran yang dimasukkan merupakan Kelipatan Rp.
+                                                                        1.000.000
+                                                                    </small>
+                                                                    <br>
+                                                                    <small>
+                                                                        - Minimal penawaran lelang :
+                                                                        {{ count($penawaran) == 0? 'Rp. ' . number_format($item[0]->open_bid, 0, ',', '.'): 'Rp. ' . number_format($penawaran[0]->offer_price + 1000000, 0, ',', '.') }}
+                                                                    </small>
                                                                     @if (count($penawaran) != 0)
                                                                         <br>
                                                                         <small>
                                                                             - Harga penawaran tertinggi :
                                                                             Rp.
-                                                                            {{ number_format($penawaran[0]['offer_price'], 0, ',', '.') }}
+                                                                            {{ number_format($penawaran[0]->offer_price, 0, ',', '.') }}
                                                                         </small>
                                                                     @endif
                                                                 </div>
@@ -266,7 +277,21 @@
                                 @forelse ($penawaran as $item)
                                     <tr>
                                         <td>{{ $no++ }}</td>
-                                        <td>{{ strtoupper($item->offer_code) }}</td>
+                                        <td>
+                                            @auth
+                                                @if ($item->id_penawar == Auth::user()->id)
+                                                    <a class="text-dark"
+                                                        href="{{ route('view.cart', ['offer_code' => $item->offer_code]) }}"
+                                                        title="Penawaran Kamu">
+                                                        {{ strtoupper($item->offer_code) }}
+                                                    </a>
+                                                @else
+                                                    {{ strtoupper($item->offer_code) }}
+                                                @endif
+                                            @else
+                                                {{ strtoupper($item->offer_code) }}
+                                            @endauth
+                                        </td>
                                         <td>
                                             @if ($item->offer_type == 'bid')
                                                 Penawaran Lelang

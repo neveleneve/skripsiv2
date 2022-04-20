@@ -29,11 +29,45 @@
                             </a>
                         </li>
                         <li class="breadcrumb-item active" aria-current="page">Transaksi
-                            {{ strtoupper($data[0]->offer_code) }}
                         </li>
                     </ol>
                 </nav>
                 <hr>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-lg-8 mb-3 mb-lg-0">
+                <div class="card">
+                    <div class="card-body">
+                        <p class="fw-bold h4">
+                            Detail Transaksi
+                            <hr>
+                        </p>
+                        <p><strong>ID Transaksi : </strong> {{ $data[0]->offer_code }}</p>
+                        <div class="row mb-3">
+                            <div class="col-4">
+                                <img src="{{ file_exists('img/items/' . $data[0]->id_item . '-1.png')? asset('img/items/' . $data[0]->id_item . '-1.png'): asset('img/items/default.png') }}"
+                                    class="d-block w-100" alt="...">
+                            </div>
+                            <div class="col-8">
+                                <p class="fw-bold mb-0">{{ $data[0]->item_name }}</p>
+                                <p class="">by {{ $data[0]->username }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-4">
+                <div class="card">
+                    <div class="card-body">
+                        <p class="fw-bold h4">
+                            Detail Pembayaran
+                            <hr>
+                        </p>
+                        <p><strong>Jenis Penawaran : </strong>
+                            {{ $data[0]->offer_type == 'bid' ? 'Lelang' : 'Beli Langsung' }}</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

@@ -32,27 +32,27 @@ class ItemSeeder extends Seeder
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s')
         ]);
-        // $created_at = date('Y-m-d H:i:s');
-        // $offer_code = [
-        //     'previous_offer_code' => null,
-        //     'id_penawar' => 3,
-        //     'id_seller' => 2,
-        //     'id_item' => $item_id,
-        //     'offer_price' => '25000000',
-        //     'offer_type' => 'bid',
-        //     'created_at' => $created_at,
-        // ];
-        // Offer::insert([
-        //     'offer_code' => hash('md2', serialize($offer_code)),
-        //     'id_penawar' => 3,
-        //     'id_seller' => 2,
-        //     'id_item' => $item_id,
-        //     'offer_price' => '25000000',
-        //     'offer_type' => 'bid',
-        //     'order_status' => 'initiate',
-        //     'created_at' => $created_at,
-        //     'updated_at' => $created_at
-        // ]);
+        $created_at = date('Y-m-d H:i:s');
+        $offer_code = [
+            'previous_offer_code' => null,
+            'id_penawar' => 3,
+            'id_seller' => 2,
+            'id_item' => $item_id,
+            'offer_price' => '25000000',
+            'offer_type' => 'bid',
+            'created_at' => $created_at,
+        ];
+        Offer::insert([
+            'offer_code' => hash('md2', serialize($offer_code)),
+            'id_penawar' => 3,
+            'id_seller' => 2,
+            'id_item' => $item_id,
+            'offer_price' => '25000000',
+            'offer_type' => 'bid',
+            'order_status' => 'done',
+            'created_at' => $created_at,
+            'updated_at' => $created_at
+        ]);
     }
 
     public function generateRandomString($length)

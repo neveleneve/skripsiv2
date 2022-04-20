@@ -46,6 +46,16 @@ class UserSeeder extends Seeder
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s'),
             ],
+            [
+                'name' => 'Abdi Negoro',
+                'username' => 'abdinegoro',
+                'email' => 'abdinegoro@gmail.com',
+                'email_verified_at' => null,
+                'password' => Hash::make('userbiasa'),
+                'role' => 'user',
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s'),
+            ],
         ]);
     }
 }

@@ -50,7 +50,7 @@
                             <tr>
                                 {{-- <td>{{ $no++ }}</td> --}}
                                 <td>
-                                    <a class="text-dark text-decoration-none" target="___blank"
+                                    <a class="text-dark text-decoration-none"
                                         href="{{ route('view.cart', ['offer_code' => $item->offer_code]) }}">
                                         {{ strtoupper($item->offer_code) }}
                                     </a>
@@ -68,8 +68,10 @@
                                         <p class="m-0">
                                             Belum ada pembayaran
                                             <small>
-                                                <i title="Pesanan baru masuk. Belum melakukan pembayaran!"
-                                                    class="bi-exclamation-circle text-success pe-auto"></i>
+                                                <a class="text-decoration-none" href="{{ route('view.cart', ['offer_code' => $item->offer_code]) }}">
+                                                    <i title="Belum melakukan pembayaran! Klik untuk bayar!"
+                                                        class="bi-exclamation-circle text-success pe-auto"></i>
+                                                </a>
                                             </small>
                                         </p>
                                     @elseif ($item->order_status == 'payment')

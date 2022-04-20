@@ -28,6 +28,7 @@ class UserController extends Controller
             'no' => 1,
         ]);
     }
+
     public function viewstatus($offer_code)
     {
         $cekdata = Offer::where('offer_code', $offer_code)->get('id_penawar');
@@ -35,20 +36,30 @@ class UserController extends Controller
             $datapenawaran = DB::table('offers')
                 ->join('users', 'offers.id_seller', 'users.id')
                 ->join('items', 'offers.id_item', 'items.item_id')
-                ->select('offers.*')
+                ->join('brands', 'items.brand', 'brands.id')
+                ->select([
+                    'offers.offer_code',
+                    'offers.offer_price',
+                    'offers.offer_type',
+                    'offers.order_status',
+                    'items.name as item_name',
+                    'items.item_id as id_item',
+                    'brands.name as brand_name',
+                    'users.username'
+                ])
                 ->where(['offers.offer_code' => $offer_code])
                 ->get();
             return view('user.view_status_lelang', [
                 'data' => $datapenawaran,
             ]);
         } else {
-            # code...
-            echo 'tidak pas';
+            Alert::alert('Aww Crap!', 'Kamu tidak bisa mengakses transaksi ini!', 'danger');
+            return redirect(route('landing-page'));
         }
     }
+
     public function ikutlelang(Request $data)
     {
-        // dd($data->all());
         // check if user have done the proccess
         if (Auth::check()) {
             if ($data->nama_penjual == Auth::user()->username) {
@@ -83,13 +94,30 @@ class UserController extends Controller
                         'offer_type' => $data->jenis,
                         'created_at' => $tanggal,
                     ];
-                    print_r($offer_code);
-                    echo(hash('md2', serialize($offer_code)));
+                    Offer::insert([
+                        'offer_code' => hash('md2', serialize($offer_code)),
+                        'id_penawar' => $data->user_id,
+                        'id_seller' => $data->id_penjual,
+                        'id_item' => $data->item_id,
+                        'offer_price' => $data->harga,
+                        'offer_type' => $data->jenis,
+                        'created_at' => $tanggal,
+                        'order_status' => 'initiate',
+                        'updated_at' => $tanggal
+                    ]);
+                    Alert::alert('Yeay!', 'Berhasil melakukan penawaran! Silahkan menyelesaikan pembayaran!', 'success');
+                    return redirect(route('item.view', [
+                        'username' => $data->nama_penjual,
+                        'id_item' => $data->item_id
+                    ]));
                 }
             }
         } else {
             Alert::alert('Aww Crap!', 'Kamu harus masuk untuk melakukan transaksi ini!', 'danger');
-            return redirect(route('item.view', ['username' => $data->nama_penjual, 'id_item' => $data->item_id]));
+            return redirect(route('item.view', [
+                'username' => $data->nama_penjual,
+                'id_item' => $data->item_id
+            ]));
         }
     }
 }

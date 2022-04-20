@@ -23,6 +23,7 @@ class GeneralController extends Controller
             'items' => $item
         ]);
     }
+    
     public function viewitem($username, $id_item)
     {
         // cek jika item tersedia
@@ -34,6 +35,7 @@ class GeneralController extends Controller
             ])
             ->count();
         if ($cekdata == 1) {
+            // get data of item
             $data = DB::table('items')
                 ->join('users', 'items.seller_id', 'users.id')
                 ->join('brands', 'items.brand', 'brands.id')
@@ -44,23 +46,25 @@ class GeneralController extends Controller
                     'users.username' => $username,
                 ])
                 ->get();
+            // get data of item's offers
             $datapenawaran = DB::table('offers')
                 ->join('users', 'offers.id_seller', 'users.id')
                 ->join('items', 'offers.id_item', 'items.item_id')
                 ->select('offers.*')
                 ->where([
                     'items.item_id' => $id_item,
-                    'users.username' => $username,
+                    // 'users.username' => $username,
                     'offers.order_status' => 'done',
                 ])
                 ->orderBy('offer_price', 'desc')
-                ->get();
+                ->get()
+                ->all();
+            // check if user has make an offer
             if (isset(Auth::user()->id)) {
                 $cekdataakun = Offer::where('id_penawar', Auth::user()->id)->select('offer_code')->get();
             } else {
                 $cekdataakun = 0;
             }
-            // dd($datapenawaran);
         } elseif ($cekdata > 1) {
             Alert::alert('Aww Crap!', 'Terjadi kesalahan ketika membuka halaman item!', 'danger');
             return redirect(route('landing-page'));
@@ -74,6 +78,7 @@ class GeneralController extends Controller
             'cekpenawaran' => $cekdataakun,
         ]);
     }
+
     public function viewuser($username)
     {
         echo $username;
@@ -81,23 +86,28 @@ class GeneralController extends Controller
             return redirect(route('cart'));
         }
     }
+
     public function mostviewed()
     {
         return view('general.most-viewed');
     }
+
     public function brand()
     {
         return view('general.brand');
     }
+
     public function viewbrand($name)
     {
         $data = Brand::where('name', $name)->get();
         dd($data);
     }
+
     public function category()
     {
         return view('general.category');
     }
+
     public function viewcategory()
     {
         echo 'view tipe';

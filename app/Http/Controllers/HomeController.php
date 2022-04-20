@@ -15,12 +15,15 @@ class HomeController extends Controller
     {
         return view('home');
     }
+
     public function profile()
     {
     }
+
     public function setting()
     {
     }
+    
     public function penawaran($username, $id_item)
     {
         // hanya bisa dilihat oleh orang yang melelang barang
