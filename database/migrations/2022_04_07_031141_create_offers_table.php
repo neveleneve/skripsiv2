@@ -20,6 +20,10 @@ class CreateOffersTable extends Migration
             $table->integer('id_seller');
             $table->string('id_item');
             $table->integer('offer_price');
+            $table->string('payment_url');
+            // order status means
+            // bid => this type is for transaction of bidding offer
+            // buy => this type is for transaction of direct buy offer
             $table->enum('offer_type', ['bid', 'buy']);
             // order status means
             // initiate => user has insert their offer price on item page. if its done, they directly go to payment page to do payment.

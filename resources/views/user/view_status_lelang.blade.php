@@ -66,9 +66,25 @@
                         </p>
                         <p><strong>Jenis Penawaran : </strong>
                             {{ $data[0]->offer_type == 'bid' ? 'Lelang' : 'Beli Langsung' }}</p>
+                        <p><strong>Harga Penawaran : </strong>Rp. {{ number_format($data[0]->offer_price, 0, '.', '.') }}
+                        </p>
+                        <hr>
+                        <p><strong>Biaya Ikut Lelang : </strong>Rp. 150.000 </p>
+                        <button id="bayar" class="btn btn-sm btn-primary">Bayar Sekarang</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+@endsection
+
+@section('customjs')
+    <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js"
+        data-client-key="{{ ENV('MIDTRANS_CLIENT_KEY') }}"></script>
+    <script type="text/javascript">
+        var payButton = document.getElementById('bayar');
+        payButton.addEventListener('click', function() {
+            window.snap.pay('{{ $data[0]->payment_url }}');
+        });
+    </script>
 @endsection

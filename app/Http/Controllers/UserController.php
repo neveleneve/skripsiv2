@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Offer;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -42,6 +43,7 @@ class UserController extends Controller
                     'offers.offer_price',
                     'offers.offer_type',
                     'offers.order_status',
+                    'offers.payment_url',
                     'items.name as item_name',
                     'items.item_id as id_item',
                     'brands.name as brand_name',
@@ -66,6 +68,7 @@ class UserController extends Controller
                 Alert::alert('Aww Crap!', 'Kamu merupakan penjual item ini!', 'danger');
                 return redirect(route('item.view', ['username' => $data->nama_penjual, 'id_item' => $data->item_id]));
             } else {
+                $payment_url = null;
                 $checkdata = Offer::where([
                     'id_item' => $data->item_id,
                     'id_penawar' => $data->user_id,
@@ -94,12 +97,37 @@ class UserController extends Controller
                         'offer_type' => $data->jenis,
                         'created_at' => $tanggal,
                     ];
+                    $param = [
+                        'transaction_details' => [
+                            'order_id' => Auth::user()->username . '-' . $data->item_id,
+                            'gross_amount' => 150000,
+                        ],
+                        'item_details' => [
+                            [
+                                'id' => 'OFFERFEE',
+                                'price' => 150000,
+                                'quantity' => 1,
+                                'name' => 'LelanginStore ' . ucwords($data->jenis) . ' Item ' . $data->item_id,
+                            ]
+                        ],
+                        'customer_details' => [
+                            'first_name' => Auth::user()->name,
+                            'email' => Auth::user()->email,
+                        ]
+                    ];
+                    $this->initPaymentGateway();
+                    try {
+                    $payment_url = \Midtrans\Snap::getSnapToken($param);
+                    } catch (Exception $e) {
+                        echo $e->getMessage();
+                    }
                     Offer::insert([
                         'offer_code' => hash('md2', serialize($offer_code)),
                         'id_penawar' => $data->user_id,
                         'id_seller' => $data->id_penjual,
                         'id_item' => $data->item_id,
                         'offer_price' => $data->harga,
+                        'payment_url' => $payment_url,
                         'offer_type' => $data->jenis,
                         'created_at' => $tanggal,
                         'order_status' => 'initiate',
