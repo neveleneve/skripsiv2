@@ -5,6 +5,9 @@ use Illuminate\Http\Request;
 
 define('LARAVEL_START', microtime(true));
 
+// MIDTRANS_MERCHANT_ID=G027955969
+// MIDTRANS_CLIENT_KEY=SB-Mid-client-B4tgJw5fBUYredZR
+// MIDTRANS_SERVER_KEY=SB-Mid-server-px0DFJunLx3nnMM8ndE8WaM6
 /*
 |--------------------------------------------------------------------------
 | Check If The Application Is Under Maintenance
