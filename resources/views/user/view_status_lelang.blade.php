@@ -43,15 +43,52 @@
                             Detail Transaksi
                             <hr>
                         </p>
-                        <p><strong>ID Transaksi : </strong> {{ $data[0]->offer_code }}</p>
+                        <table class="mb-3">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <strong>ID Transaksi &nbsp;</strong>
+                                    </td>
+                                    <td>
+                                        <strong>: &nbsp;</strong>
+                                    </td>
+                                    <td>
+                                        {{ $data[0]->offer_code }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>Harga Penawaran &nbsp;</strong>
+                                    </td>
+                                    <td>
+                                        <strong>: &nbsp;</strong>
+                                    </td>
+                                    <td>
+                                        Rp. {{ number_format($data[0]->offer_price, 0, '.', '.') }}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                         <div class="row mb-3">
                             <div class="col-4">
-                                <img src="{{ file_exists('img/items/' . $data[0]->id_item . '-1.png')? asset('img/items/' . $data[0]->id_item . '-1.png'): asset('img/items/default.png') }}"
-                                    class="d-block w-100" alt="...">
+                                <a target="__blank"
+                                    href="{{ route('item.view', ['username' => $data[0]->username, 'id_item' => $data[0]->id_item]) }}">
+                                    <img src="{{ file_exists('img/items/' . $data[0]->id_item . '-1.png')? asset('img/items/' . $data[0]->id_item . '-1.png'): asset('img/items/default.png') }}"
+                                        class="d-block w-100" alt="...">
+                                </a>
                             </div>
                             <div class="col-8">
-                                <p class="fw-bold mb-0">{{ $data[0]->item_name }}</p>
-                                <p class="">by {{ $data[0]->username }}</p>
+                                <a target="__blank" class="text-dark"
+                                    href="{{ route('item.view', ['username' => $data[0]->username, 'id_item' => $data[0]->id_item]) }}">
+                                    <p class="fw-bold mb-0">{{ $data[0]->item_name }}</p>
+                                </a>
+                                <p class="">by
+                                    <a target="__blank"
+                                        href="{{ route('user.view', ['username' => $data[0]->username]) }}"
+                                        class="text-dark">
+                                        {{ $data[0]->username }}
+                                    </a>
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -64,13 +101,48 @@
                             Detail Pembayaran
                             <hr>
                         </p>
-                        <p><strong>Jenis Penawaran : </strong>
-                            {{ $data[0]->offer_type == 'bid' ? 'Lelang' : 'Beli Langsung' }}</p>
-                        <p><strong>Harga Penawaran : </strong>Rp. {{ number_format($data[0]->offer_price, 0, '.', '.') }}
-                        </p>
+                        <table>
+                            <tr>
+                                <td>
+                                    <strong>Jenis Penawaran &nbsp;</strong>
+
+                                </td>
+                                <td>
+                                    <strong>: &nbsp;</strong>
+                                </td>
+                                <td>
+                                    {{ $data[0]->offer_type == 'bid' ? 'Lelang' : 'Beli Langsung' }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Biaya Lelang &nbsp;</strong>
+
+                                </td>
+                                <td>
+                                    <strong>: &nbsp;</strong>
+                                </td>
+                                <td>
+                                    Rp. 150.000
+                                </td>
+
+                            </tr>
+                        </table>
                         <hr>
-                        <p><strong>Biaya Ikut Lelang : </strong>Rp. 150.000 </p>
-                        <button id="bayar" class="btn btn-sm btn-primary">Bayar Sekarang</button>
+                        <div class="row">
+                            <div class="col-12 d-grid gap-2">
+                                @if ($data[0]->order_status == 'initiate')
+                                    <button id="bayar" class="btn btn-sm btn-outline-success">Bayar Sekarang</button>
+                                    <button id="cancel" class="btn btn-sm btn-outline-danger">Batalkan Penawaran</button>
+                                @elseif ($data[0]->order_status == 'payment')
+                                    <button class="btn btn-sm btn-outline-success">Menunggu Konfirmasi Pembayaran</button>
+                                @elseif($data[0]->order_status == 'done')
+                                    <button class="btn btn-sm btn-outline-success">Pembayaran Selesai</button>
+                                @elseif($data[0]->order_status == 'cancel')
+                                    <button class="btn btn-sm btn-outline-success">Penawaran dibatalkan</button>
+                                @endif
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -79,12 +151,19 @@
 @endsection
 
 @section('customjs')
-    <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js"
-        data-client-key="{{ ENV('MIDTRANS_CLIENT_KEY') }}"></script>
-    <script type="text/javascript">
-        var payButton = document.getElementById('bayar');
-        payButton.addEventListener('click', function() {
-            window.snap.pay('{{ $data[0]->payment_url }}');
-        });
-    </script>
+    @if ($data[0]->order_status == 'initiate')
+        <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js"
+                data-client-key="{{ ENV('MIDTRANS_CLIENT_KEY') }}"></script>
+        <script type="text/javascript">
+            var payButton = document.getElementById('bayar');
+            payButton.addEventListener('click', function() {
+                window.snap.pay('{{ $data[0]->payment_url }}');
+            });
+        </script>
+    @elseif ($data[0]->order_status == 'done')
+
+    @elseif($data[0]->order_status == 'done')
+
+    @elseif($data[0]->order_status == 'done')
+    @endif
 @endsection

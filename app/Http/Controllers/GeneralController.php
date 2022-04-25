@@ -23,7 +23,7 @@ class GeneralController extends Controller
             'items' => $item
         ]);
     }
-    
+
     public function viewitem($username, $id_item)
     {
         // cek jika item tersedia
@@ -61,7 +61,14 @@ class GeneralController extends Controller
                 ->all();
             // check if user has make an offer
             if (isset(Auth::user()->id)) {
-                $cekdataakun = Offer::where('id_penawar', Auth::user()->id)->select('offer_code')->get();
+                $cekdataakun = Offer::where([
+                    [
+                        'id_penawar', '=', Auth::user()->id
+                    ],
+                    [
+                        'order_status', '<>', 'cancel'
+                    ]
+                ])->select('offer_code')->get();
             } else {
                 $cekdataakun = 0;
             }

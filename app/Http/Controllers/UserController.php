@@ -32,8 +32,54 @@ class UserController extends Controller
 
     public function viewstatus($offer_code)
     {
-        $cekdata = Offer::where('offer_code', $offer_code)->get('id_penawar');
+        $cekdata = Offer::where('offer_code', $offer_code)->get(['id_penawar', 'offer_type', 'id_item', 'payment_url', 'id']);
+        $endpoint = "https://api.sandbox.midtrans.com/v2/" . Auth::user()->username . '-' . $cekdata[0]->id_item . "/status";
+        $client = new \GuzzleHttp\Client([
+            'headers' => [
+                'Accept' => 'application/json',
+                'Content-Type' => 'application/json',
+                'Authorization' => 'Basic ' . base64_encode(env('MIDTRANS_SERVER_KEY')),
+            ]
+        ]);
+        $response = $client->request('GET', $endpoint);
+        $content = json_decode($response->getBody(), true);
+        // dd($content);
         if ($cekdata[0]['id_penawar'] === Auth::user()->id) {
+            if ($content['status_code'] === "404") {
+                $param = [
+                    'transaction_details' => [
+                        'order_id' => Auth::user()->username . '-' . $cekdata[0]->id_item,
+                        'gross_amount' => 150000,
+                    ],
+                    'item_details' => [
+                        [
+                            'id' => 'OFFERFEE',
+                            'price' => 150000,
+                            'quantity' => 1,
+                            'name' => 'LelanginStore ' . ucwords($cekdata[0]['offer_type']) . ' Item ' . $cekdata[0]['id_item'],
+                        ]
+                    ],
+                    'customer_details' => [
+                        'first_name' => Auth::user()->name,
+                        'email' => Auth::user()->email,
+                    ]
+                ];
+                // dd($param);
+                $this->initPaymentGateway();
+                try {
+                    $payment_url = \Midtrans\Snap::getSnapToken($param);
+                } catch (Exception $e) {
+                    echo $e->getMessage();
+                }
+                Offer::where('id', $cekdata[0]['id'])->update([
+                    'payment_url' => $payment_url
+                ]);
+            } else if ($content['status_code'] === "200"){
+                Offer::where('id', $cekdata[0]['id'])->update([
+                    'order_status' => 'done'
+                ]);
+                // dd('sudah bayar');
+            }
             $datapenawaran = DB::table('offers')
                 ->join('users', 'offers.id_seller', 'users.id')
                 ->join('items', 'offers.id_item', 'items.item_id')
@@ -117,7 +163,7 @@ class UserController extends Controller
                     ];
                     $this->initPaymentGateway();
                     try {
-                    $payment_url = \Midtrans\Snap::getSnapToken($param);
+                        $payment_url = \Midtrans\Snap::getSnapToken($param);
                     } catch (Exception $e) {
                         echo $e->getMessage();
                     }

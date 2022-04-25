@@ -203,8 +203,6 @@
                                                                     </label>
                                                                     <input type="number" class="form-control form-control-sm"
                                                                         name="harga" id="harga" step="1000000"
-                                                                        {{-- min="{{ count($penawaran) == 0 ? $item[0]->open_bid : $penawaran[0]['offer_price'] }}"
-                                                                        value="{{ count($penawaran) == 0 ? $item[0]->open_bid : $penawaran[0]['offer_price'] }}" --}}
                                                                         min="{{ count($penawaran) == 0 ? $item[0]->open_bid : $penawaran[0]->offer_price }}"
                                                                         value="{{ count($penawaran) == 0 ? $item[0]->open_bid : $penawaran[0]->offer_price + 1000000 }}">
                                                                     <small>
@@ -305,8 +303,8 @@
                                             Rp. {{ number_format($item->offer_price, 0, ',', '.') }}
                                         </td>
                                         <td>
-                                            {{ time_elapsed_string($item->created_at) }} <i class="bi-exclamation-circle"
-                                                title="{{ date('d M Y H:i', strtotime($item->created_at)) }}"></i>
+                                            {{ time_elapsed_string($item->updated_at) }} <i class="bi-exclamation-circle"
+                                                title="{{ date('d M Y H:i', strtotime($item->updated_at)) }}"></i>
                                         </td>
                                     </tr>
                                 @empty
