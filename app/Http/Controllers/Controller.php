@@ -18,4 +18,13 @@ class Controller extends BaseController
         \Midtrans\Config::$isSanitized = true;
         \Midtrans\Config::$is3ds = true;
     }
+
+    protected function checkOrderStatus($id_penjual, $id_item, $order_id = null)
+    {
+        if ($order_id === null) {
+            # code...
+        } else {
+            # code...
+        }
+    }
 }

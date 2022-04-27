@@ -20,7 +20,7 @@ class AdminMiddleware
         if (Auth::user()->role == 'admin') {
             return $next($request);            
         }else {
-            return redirect(route('landing-page'));
+            return redirect(route('page.landing'));
         }
     }
 }

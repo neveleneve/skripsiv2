@@ -14,7 +14,7 @@
                     aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item" aria-current="page">
-                            <a class="text-success" href="{{ route('landing-page') }}">
+                            <a class="text-success" href="{{ route('page.landing') }}">
                                 <strong>Lelangin</strong>Store
                             </a>
                         </li>
@@ -71,20 +71,19 @@
                         </table>
                         <div class="row mb-3">
                             <div class="col-4">
-                                <a target="__blank"
+                                <a
                                     href="{{ route('item.view', ['username' => $data[0]->username, 'id_item' => $data[0]->id_item]) }}">
                                     <img src="{{ file_exists('img/items/' . $data[0]->id_item . '-1.png')? asset('img/items/' . $data[0]->id_item . '-1.png'): asset('img/items/default.png') }}"
                                         class="d-block w-100" alt="...">
                                 </a>
                             </div>
                             <div class="col-8">
-                                <a target="__blank" class="text-dark"
+                                <a class="text-dark"
                                     href="{{ route('item.view', ['username' => $data[0]->username, 'id_item' => $data[0]->id_item]) }}">
                                     <p class="fw-bold mb-0">{{ $data[0]->item_name }}</p>
                                 </a>
                                 <p class="">by
-                                    <a target="__blank"
-                                        href="{{ route('user.view', ['username' => $data[0]->username]) }}"
+                                    <a href="{{ route('user.view', ['username' => $data[0]->username]) }}"
                                         class="text-dark">
                                         {{ $data[0]->username }}
                                     </a>
@@ -134,6 +133,7 @@
                                 @if ($data[0]->order_status == 'initiate')
                                     <button id="bayar" class="btn btn-sm btn-outline-success">Bayar Sekarang</button>
                                     <button id="cancel" class="btn btn-sm btn-outline-danger">Batalkan Penawaran</button>
+                                    <p id="demo"></p>
                                 @elseif ($data[0]->order_status == 'payment')
                                     <button class="btn btn-sm btn-outline-success">Menunggu Konfirmasi Pembayaran</button>
                                 @elseif($data[0]->order_status == 'done')
@@ -159,11 +159,20 @@
             payButton.addEventListener('click', function() {
                 window.snap.pay('{{ $data[0]->payment_url }}');
             });
+            var cancelButton = document.getElementById('cancel');
+            cancelButton.addEventListener('click', function() {
+                if (window.confirm(
+                        'Batalkan Penawaran {{ $data[0]->offer_code }} ? (Aksi ini tidak dapat dibatalkan!)')) {
+                    window.location.href = '{{ route('offer.cancel', ['id' => $data[0]->offer_code]) }}';
+                }
+            });
         </script>
-    @elseif ($data[0]->order_status == 'done')
+        <script type="text/javascript">
+        </script>
+    @elseif ($data[0]->order_status == 'payment')
 
     @elseif($data[0]->order_status == 'done')
 
-    @elseif($data[0]->order_status == 'done')
+    @elseif($data[0]->order_status == 'cancel')
     @endif
 @endsection

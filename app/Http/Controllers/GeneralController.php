@@ -40,7 +40,13 @@ class GeneralController extends Controller
                 ->join('users', 'items.seller_id', 'users.id')
                 ->join('brands', 'items.brand', 'brands.id')
                 ->join('categories', 'items.category', 'categories.id')
-                ->select('items.*', 'users.username', 'users.id', 'brands.name as brand_name', 'categories.name as category_name')
+                ->select([
+                    'items.*',
+                    'users.username',
+                    'users.id',
+                    'brands.name as brand_name',
+                    'categories.name as category_name'
+                ])
                 ->where([
                     'items.item_id' => $id_item,
                     'users.username' => $username,
@@ -74,10 +80,10 @@ class GeneralController extends Controller
             }
         } elseif ($cekdata > 1) {
             Alert::alert('Aww Crap!', 'Terjadi kesalahan ketika membuka halaman item!', 'danger');
-            return redirect(route('landing-page'));
+            return redirect(route('page.landing'));
         } else {
             Alert::alert('Aww Crap!', 'Data yang akan dibuka tidak tersedia!', 'danger');
-            return redirect(route('landing-page'));
+            return redirect(route('page.landing'));
         }
         return view('general.view_item', [
             'item' => $data,

@@ -14,7 +14,7 @@
                     aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item" aria-current="page">
-                            <a class="text-success" href="{{ route('landing-page') }}">
+                            <a class="text-success" href="{{ route('page.landing') }}">
                                 <strong>Lelangin</strong>Store
                             </a>
                         </li>
@@ -68,7 +68,8 @@
                                         <p class="m-0">
                                             Belum ada pembayaran
                                             <small>
-                                                <a class="text-decoration-none" href="{{ route('view.cart', ['offer_code' => $item->offer_code]) }}">
+                                                <a class="text-decoration-none"
+                                                    href="{{ route('view.cart', ['offer_code' => $item->offer_code]) }}">
                                                     <i title="Belum melakukan pembayaran! Klik untuk bayar!"
                                                         class="bi-exclamation-circle text-success pe-auto"></i>
                                                 </a>
@@ -79,6 +80,14 @@
                                             Menunggu status pembayaran
                                             <small>
                                                 <i title="Pembayaran berhasil dilakukan! Menunggu pembaruan."
+                                                    class="bi-exclamation-circle text-success pe-auto"></i>
+                                            </small>
+                                        </p>
+                                    @elseif($item->order_status == 'cancel')
+                                        <p class="m-0">
+                                            Dibatalkan
+                                            <small>
+                                                <i title="Penawaran dibatalkan!"
                                                     class="bi-exclamation-circle text-success pe-auto"></i>
                                             </small>
                                         </p>

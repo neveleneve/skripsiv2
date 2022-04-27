@@ -13,7 +13,7 @@
                     aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item" aria-current="page">
-                            <a class="text-success" href="{{ route('landing-page') }}">
+                            <a class="text-success" href="{{ route('page.landing') }}">
                                 <strong>Lelangin</strong>Store
                             </a>
                         </li>

@@ -20,7 +20,7 @@ class UserMiddleware
         if (Auth::user()->role == 'user') {
             return $next($request);
         } else {
-            return redirect(route('landing-page'));
+            return redirect(route('page.landing'));
         }
     }
 }

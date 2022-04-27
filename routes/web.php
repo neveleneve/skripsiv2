@@ -17,8 +17,10 @@ Route::get('profile/status-lelang/{offer_code}', 'UserController@viewstatus')->n
 
 Route::post('ikut-lelang', 'UserController@ikutlelang')->name('penawaran');
 
+Route::get('cancel/{id}', 'UserController@canceloffer')->name('offer.cancel');
+
 // General Routes
-Route::get('/', 'GeneralController@landing')->name('landing-page');
+Route::get('/', 'GeneralController@landing')->name('page.landing');
 
 Route::get('most-viewed', 'GeneralController@mostviewed')->name('most-viewed');
 

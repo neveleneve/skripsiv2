@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm fixed-top">
     <div class="container-fluid py-2">
-        <a class="navbar-brand ms-4 text-success" href="{{ route('landing-page') }}"><strong>Lelangin</strong>Store</a>
+        <a class="navbar-brand ms-4 text-success" href="{{ route('page.landing') }}"><strong>Lelangin</strong>Store</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>

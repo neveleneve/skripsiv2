@@ -15,7 +15,7 @@
                     aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item" aria-current="page">
-                            <a class="text-success" href="{{ route('landing-page') }}">
+                            <a class="text-success" href="{{ route('page.landing') }}">
                                 <strong>Lelangin</strong>Store
                             </a>
                         </li>
@@ -81,7 +81,7 @@
                         </small>
                         <hr>
                         <p class="card-text mb-2 text-success"><strong>Deskripsi</strong></p>
-                        <p class="card-text">{{ $item[0]->description }}</p>
+                        <p class="card-text text-justify" style="text-align: justify;">{{ $item[0]->description }}</p>
                         <p class="card-text mb-2 text-success"><strong>Tanggal Berakhir</strong></p>
                         <p class="card-text">{{ date('d M Y, H:i:s', strtotime($item[0]->end_time)) }} WIB</p>
                         <div class="row mb-3">
@@ -98,7 +98,7 @@
                                     <div class="card-body bg-light">
                                         <p class="card-text m-0 text-success"><strong>Brand</strong></p>
                                         <p class="card-text m-0">
-                                            <a class="text-dark text-decoration-none" target="__blank"
+                                            <a class="text-dark text-decoration-none"
                                                 title="Lihat Tipe {{ $item[0]->brand_name }}"
                                                 href="{{ route('view.brand', ['name' => strtolower($item[0]->brand_name)]) }}">
                                                 {{ $item[0]->brand_name }}
@@ -112,7 +112,7 @@
                                     <div class="card-body bg-light">
                                         <p class="card-text m-0 text-success"><strong>Tipe</strong></p>
                                         <p class="card-text m-0">
-                                            <a class="text-dark text-decoration-none" target="__blank"
+                                            <a class="text-dark text-decoration-none"
                                                 title="Lihat Tipe {{ $item[0]->category_name }}"
                                                 href="{{ route('view.category', ['name' => strtolower($item[0]->category_name)]) }}">
                                                 {{ $item[0]->category_name }}
@@ -123,7 +123,7 @@
                             </div>
                         </div>
                         <div class="row mb-0 mb-lg-3">
-                            <div class="col-12 col-lg-6 mb-lg-0 mb-3">
+                            <div class="col-12 col-lg-4 mb-lg-0 mb-3">
                                 <div class="card">
                                     <div class="card-body bg-light">
                                         <p class="card-text m-0 text-success"><strong>Harga Awal Lelang</strong></p>
@@ -133,12 +133,26 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-12 col-lg-6 mb-lg-0 mb-3">
+                            <div class="col-12 col-lg-4 mb-lg-0 mb-3">
                                 <div class="card">
                                     <div class="card-body bg-light">
                                         <p class="card-text m-0 text-success"><strong>Harga Beli Langsung</strong></p>
                                         <p class="card-text m-0">
                                             Rp. {{ number_format($item[0]->buyitnow, 0, ',', '.') }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-4 mb-lg-0 mb-3">
+                                <div class="card">
+                                    <div class="card-body bg-light">
+                                        <p class="card-text m-0 text-success"><strong>Penawaran Tertinggi</strong></p>
+                                        <p class="card-text m-0">
+                                            @if (count($penawaran) > 0)
+                                                Rp. {{ number_format($penawaran[0]->offer_price, 0, ',', '.') }}
+                                            @else
+                                                Belum <Ada></Ada>
+                                            @endif
                                         </p>
                                     </div>
                                 </div>
@@ -157,7 +171,7 @@
                                         @else
                                             @if (count($cekpenawaran) > 0)
                                                 <a href="{{ route('view.cart', ['offer_code' => $cekpenawaran[0]['offer_code']]) }}"
-                                                    class="btn btn-sm btn-outline-success fw-bold" target="__blank">
+                                                    class="btn btn-sm btn-outline-success fw-bold">
                                                     Lihat Transaksi
                                                 </a>
                                             @else
@@ -303,7 +317,8 @@
                                             Rp. {{ number_format($item->offer_price, 0, ',', '.') }}
                                         </td>
                                         <td>
-                                            {{ time_elapsed_string($item->updated_at) }} <i class="bi-exclamation-circle"
+                                            {{ time_elapsed_string($item->updated_at) }} <i
+                                                class="bi-exclamation-circle"
                                                 title="{{ date('d M Y H:i', strtotime($item->updated_at)) }}"></i>
                                         </td>
                                     </tr>
