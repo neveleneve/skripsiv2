@@ -38,82 +38,85 @@ class UserController extends Controller
             'id_item',
             'payment_url',
             'order_status',
+            'order_id',
             'id'
         ]);
-        $endpoint = "https://api.sandbox.midtrans.com/v2/" . Auth::user()->username . '-' . $cekdata[0]->id_item . "/status";
-        $client = new \GuzzleHttp\Client([
-            'headers' => [
-                'Accept' => 'application/json',
-                'Content-Type' => 'application/json',
-                'Authorization' => 'Basic ' . base64_encode(env('MIDTRANS_SERVER_KEY')),
-            ]
-        ]);
-        $response = $client->request('GET', $endpoint);
-        $content = json_decode($response->getBody(), true);
-        // dd($content);
-        if ($cekdata[0]['id_penawar'] === Auth::user()->id) {
-            if ($content['status_code'] === "404" || $content['status_code'] === "202") {
-                if ($cekdata[0]->order_status === 'cancel') {
-                    # code...
-                } else {
-                    // $payment_url = '';
-                    $param = [
-                        'transaction_details' => [
-                            'order_id' => Auth::user()->username . '-' . $cekdata[0]->id_item,
-                            'gross_amount' => 150000,
-                        ],
-                        'item_details' => [
-                            [
-                                'id' => 'OFFERFEE',
-                                'price' => 150000,
-                                'quantity' => 1,
-                                'name' => 'LelanginStore ' . ucwords($cekdata[0]['offer_type']) . ' Item ' . $cekdata[0]['id_item'],
+        if (count($cekdata) == 1) {
+            $endpoint = "https://api.sandbox.midtrans.com/v2/" . $cekdata[0]->order_id . "/status";
+            $client = new \GuzzleHttp\Client([
+                'headers' => [
+                    'Accept' => 'application/json',
+                    'Content-Type' => 'application/json',
+                    'Authorization' => 'Basic ' . base64_encode(env('MIDTRANS_SERVER_KEY')),
+                ]
+            ]);
+            $response = $client->request('GET', $endpoint);
+            $content = json_decode($response->getBody(), true);
+            if ($cekdata[0]['id_penawar'] === Auth::user()->id) {
+                if ($content['status_code'] === "404" || $content['status_code'] === "202") {
+                    if ($cekdata[0]->order_status === 'cancel') {
+                        # code...
+                    } else {
+                        // $payment_url = '';
+                        $param = [
+                            'transaction_details' => [
+                                'order_id' => Auth::user()->username . '-' . $cekdata[0]->id_item,
+                                'gross_amount' => 150000,
+                            ],
+                            'item_details' => [
+                                [
+                                    'id' => 'OFFERFEE',
+                                    'price' => 150000,
+                                    'quantity' => 1,
+                                    'name' => 'LelanginStore ' . ucwords($cekdata[0]['offer_type']) . ' Item ' . $cekdata[0]['id_item'],
+                                ]
+                            ],
+                            'customer_details' => [
+                                'first_name' => Auth::user()->name,
+                                'email' => Auth::user()->email,
                             ]
-                        ],
-                        'customer_details' => [
-                            'first_name' => Auth::user()->name,
-                            'email' => Auth::user()->email,
-                        ]
-                    ];
-                    $this->initPaymentGateway();
-                    try {
-                        $payment_url = \Midtrans\Snap::getSnapToken($param);
-                    } catch (Exception $e) {
-                        echo $e->getMessage();
+                        ];
+                        $this->initPaymentGateway();
+                        try {
+                            $payment_url = \Midtrans\Snap::getSnapToken($param);
+                        } catch (Exception $e) {
+                            echo $e->getMessage();
+                        }
+                        Offer::where('id', $cekdata[0]['id'])->update([
+                            'payment_url' => $payment_url
+                        ]);
                     }
-                    // dd($payment_url);
+                } elseif ($content['status_code'] === "200") {
                     Offer::where('id', $cekdata[0]['id'])->update([
-                        'payment_url' => $payment_url
+                        'order_status' => 'done'
                     ]);
                 }
-            } elseif ($content['status_code'] === "200") {
-                Offer::where('id', $cekdata[0]['id'])->update([
-                    'order_status' => 'done'
+                $datapenawaran = DB::table('offers')
+                    ->join('users', 'offers.id_seller', 'users.id')
+                    ->join('items', 'offers.id_item', 'items.item_id')
+                    ->join('brands', 'items.brand', 'brands.id')
+                    ->select([
+                        'offers.offer_code',
+                        'offers.offer_price',
+                        'offers.offer_type',
+                        'offers.order_status',
+                        'offers.payment_url',
+                        'items.name as item_name',
+                        'items.item_id as id_item',
+                        'brands.name as brand_name',
+                        'users.username'
+                    ])
+                    ->where(['offers.offer_code' => $offer_code])
+                    ->get();
+                return view('user.view_status_lelang', [
+                    'data' => $datapenawaran,
                 ]);
+            } else {
+                Alert::alert('Aww Crap!', 'Kamu tidak bisa mengakses transaksi ini!', 'danger');
+                return redirect(route('page.landing'));
             }
-            $datapenawaran = DB::table('offers')
-                ->join('users', 'offers.id_seller', 'users.id')
-                ->join('items', 'offers.id_item', 'items.item_id')
-                ->join('brands', 'items.brand', 'brands.id')
-                ->select([
-                    'offers.offer_code',
-                    'offers.offer_price',
-                    'offers.offer_type',
-                    'offers.order_status',
-                    'offers.payment_url',
-                    'items.name as item_name',
-                    'items.item_id as id_item',
-                    'brands.name as brand_name',
-                    'users.username'
-                ])
-                ->where(['offers.offer_code' => $offer_code])
-                ->get();
-            return view('user.view_status_lelang', [
-                'data' => $datapenawaran,
-            ]);
         } else {
-            Alert::alert('Aww Crap!', 'Kamu tidak bisa mengakses transaksi ini!', 'danger');
-            return redirect(route('page.landing'));
+            # code...
         }
     }
 
@@ -125,7 +128,6 @@ class UserController extends Controller
                 Alert::alert('Aww Crap!', 'Kamu merupakan penjual item ini!', 'danger');
                 return redirect(route('item.view', ['username' => $data->nama_penjual, 'id_item' => $data->item_id]));
             } else {
-                $payment_url = null;
                 $checkdata = Offer::where([
                     [
                         'order_status', '<>', 'cancel'
@@ -157,9 +159,10 @@ class UserController extends Controller
                         'offer_type' => $data->jenis,
                         'created_at' => $tanggal,
                     ];
+                    $order_id = Auth::user()->username . '_' . $data->item_id . '_' . $this->generateRandomString(3, 3);
                     $param = [
                         'transaction_details' => [
-                            'order_id' => Auth::user()->username . '-' . $data->item_id,
+                            'order_id' => $order_id,
                             'gross_amount' => 150000,
                         ],
                         'item_details' => [
@@ -188,6 +191,7 @@ class UserController extends Controller
                         'id_item' => $data->item_id,
                         'offer_price' => $data->harga,
                         'payment_url' => $payment_url,
+                        'order_id' => $order_id,
                         'offer_type' => $data->jenis,
                         'created_at' => $tanggal,
                         'order_status' => 'initiate',

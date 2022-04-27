@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Route;
 Auth::routes();
 
 // User Auth Routes
+Route::get('test', 'Controller@test')->name('test');
 Route::get('favorite', 'UserController@favorite')->name('liked');
 
 Route::get('profile/status-lelang', 'UserController@status')->name('cart');

@@ -21,6 +21,7 @@ class CreateOffersTable extends Migration
             $table->string('id_item');
             $table->integer('offer_price');
             $table->string('payment_url');
+            $table->string('order_id');
             // order status means
             // bid => this type is for transaction of bidding offer
             // buy => this type is for transaction of direct buy offer
