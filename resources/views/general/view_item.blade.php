@@ -170,7 +170,7 @@
                                             </a>
                                         @else
                                             @if (count($cekpenawaran) > 0)
-                                                <a href="{{ route('view.cart', ['offer_code' => $cekpenawaran[0]['offer_code']]) }}"
+                                                <a href="{{ route('view.cart', ['offer_code' => wordwrap($cekpenawaran[0]['offer_code'], 4, '-', true)]) }}"
                                                     class="btn btn-sm btn-outline-success fw-bold">
                                                     Lihat Transaksi
                                                 </a>
@@ -295,7 +295,7 @@
                                             @auth
                                                 @if ($item->id_penawar == Auth::user()->id)
                                                     <a class="text-dark"
-                                                        href="{{ route('view.cart', ['offer_code' => $item->offer_code]) }}"
+                                                        href="{{ route('view.cart', ['offer_code' => wordwrap($item->offer_code, 4, '-', true)]) }}"
                                                         title="Penawaran Kamu">
                                                         {{ strtoupper($item->offer_code) }}
                                                     </a>

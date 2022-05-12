@@ -32,7 +32,8 @@ class UserController extends Controller
 
     public function viewstatus($offer_code)
     {
-        $cekdata = Offer::where('offer_code', $offer_code)->get([
+        $offercode = str_replace('-', '', $offer_code);
+        $cekdata = Offer::where('offer_code', $offercode)->get([
             'id_penawar',
             'offer_type',
             'id_item',
@@ -57,7 +58,6 @@ class UserController extends Controller
                     if ($cekdata[0]->order_status === 'cancel') {
                         # code...
                     } else {
-                        // $payment_url = '';
                         $param = [
                             'transaction_details' => [
                                 'order_id' => Auth::user()->username . '-' . $cekdata[0]->id_item,
@@ -106,7 +106,7 @@ class UserController extends Controller
                         'brands.name as brand_name',
                         'users.username'
                     ])
-                    ->where(['offers.offer_code' => $offer_code])
+                    ->where(['offers.offer_code' => $offercode])
                     ->get();
                 return view('user.view_status_lelang', [
                     'data' => $datapenawaran,
@@ -223,7 +223,7 @@ class UserController extends Controller
             ]);
             Alert::alert('Yaaah!', 'Kamu telah membatalkan penawaran ini!', 'success');
             return redirect(route('view.cart', [
-                'offer_code' => $id
+                'offer_code' => wordwrap($id, 4, '-', true)
             ]));
         } else {
             Alert::alert('Aww Crap!', 'Kamu tidak bisa mengakses halaman ini!', 'danger');

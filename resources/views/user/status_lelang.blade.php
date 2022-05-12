@@ -51,8 +51,8 @@
                                 {{-- <td>{{ $no++ }}</td> --}}
                                 <td>
                                     <a class="text-dark text-decoration-none"
-                                        href="{{ route('view.cart', ['offer_code' => $item->offer_code]) }}">
-                                        {{ strtoupper($item->offer_code) }}
+                                        href="{{ route('view.cart', ['offer_code' => wordwrap($item->offer_code, 4, '-', true)]) }}">
+                                        {{ wordwrap($item->offer_code, 4, '-', true) }}
                                     </a>
                                 </td>
                                 <td>
@@ -69,7 +69,7 @@
                                             Belum ada pembayaran
                                             <small>
                                                 <a class="text-decoration-none"
-                                                    href="{{ route('view.cart', ['offer_code' => $item->offer_code]) }}">
+                                                    href="{{ route('view.cart', ['offer_code' => wordwrap($item->offer_code, 4, '-', true)]) }}">
                                                     <i title="Belum melakukan pembayaran! Klik untuk bayar!"
                                                         class="bi-exclamation-circle text-success pe-auto"></i>
                                                 </a>

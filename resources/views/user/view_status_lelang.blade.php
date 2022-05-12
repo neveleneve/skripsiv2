@@ -53,7 +53,7 @@
                                         <strong>: &nbsp;</strong>
                                     </td>
                                     <td>
-                                        {{ $data[0]->offer_code }}
+                                        {{ wordwrap($data[0]->offer_code , 4 , '-' , true ) }}
                                     </td>
                                 </tr>
                                 <tr>
