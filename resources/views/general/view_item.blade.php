@@ -33,15 +33,15 @@
                 <div id="carouselExampleControls" class="carousel slide rounded" data-bs-ride="carousel">
                     <div class="carousel-inner">
                         <div class="carousel-item active">
-                            <img src="{{ file_exists('img/items/' . $item[0]->item_id . '-1.png')? asset('img/items/' . $item[0]->item_id . '-1.png'): asset('img/items/default.png') }}"
+                            <img src="{{ file_exists('img/items/' . $item[0]->item_id . '-1.png') ? asset('img/items/' . $item[0]->item_id . '-1.png') : asset('img/items/default.png') }}"
                                 class="d-block w-100" alt="...">
                         </div>
                         <div class="carousel-item">
-                            <img src="{{ file_exists('img/items/' . $item[0]->item_id . '-1.png')? asset('img/items/' . $item[0]->item_id . '-1.png'): asset('img/items/default.png') }}"
+                            <img src="{{ file_exists('img/items/' . $item[0]->item_id . '-1.png') ? asset('img/items/' . $item[0]->item_id . '-1.png') : asset('img/items/default.png') }}"
                                 class="d-block w-100" alt="...">
                         </div>
                         <div class="carousel-item">
-                            <img src="{{ file_exists('img/items/' . $item[0]->item_id . '-1.png')? asset('img/items/' . $item[0]->item_id . '-1.png'): asset('img/items/default.png') }}"
+                            <img src="{{ file_exists('img/items/' . $item[0]->item_id . '-1.png') ? asset('img/items/' . $item[0]->item_id . '-1.png') : asset('img/items/default.png') }}"
                                 class="d-block w-100" alt="...">
                         </div>
                     </div>
@@ -151,7 +151,7 @@
                                             @if (count($penawaran) > 0)
                                                 Rp. {{ number_format($penawaran[0]->offer_price, 0, ',', '.') }}
                                             @else
-                                                Belum <Ada></Ada>
+                                                Belum Ada
                                             @endif
                                         </p>
                                     </div>
@@ -162,25 +162,34 @@
                             <div class="col-0 col-lg-8"></div>
                             <div class="col-12 col-lg-4 d-grid gap-2">
                                 @auth
+                                    {{-- cek jika user yang sudah login --}}
                                     @if (Auth::user()->role == 'user')
+                                        {{-- cek jika user yang sudah login dengan level 'user' --}}
                                         @if (Auth::user()->username == $item[0]->username)
+                                            {{-- untuk user yang melelangkan barang --}}
                                             <a href="{{ route('item.penawaran', ['username' => $item[0]->username, 'id_item' => $item[0]->item_id]) }}"
                                                 class="btn btn-sm btn-outline-success fw-bold">
                                                 Lihat Penawaran Lelang
                                             </a>
                                         @else
-                                            @if (count($cekpenawaran) > 0)
+                                            {{-- untuk selain user yang melelangkan barang --}}
+                                            @if (count($statusjoin) > 0)
+                                                {{-- cek status join lelang user --}}
+                                                {{-- @if ($penawaran[0][])
+                                                    
+                                                @else
+                                                    
+                                                @endif --}}
                                                 <a href="{{ route('view.cart', ['offer_code' => wordwrap($cekpenawaran[0]['offer_code'], 4, '-', true)]) }}"
                                                     class="btn btn-sm btn-outline-success fw-bold">
                                                     Lihat Transaksi
                                                 </a>
                                             @else
-                                                <button class="btn btn-sm btn-outline-success fw-bold" type="button"
-                                                    data-bs-toggle="modal" data-bs-target="#modalikutlelang">
-                                                    Ikuti Lelang
+                                                <button class="btn btn-sm btn-outline-success fw-bold">
+                                                    Belum Join Lelang {{ count($statusjoin) . Auth::user()->username }}
                                                 </button>
                                                 {{-- modal mengikuti lelang --}}
-                                                <div class="modal fade" id="modalikutlelang" tabindex="-1"
+                                                {{-- <div class="modal fade" id="modalikutlelang" tabindex="-1"
                                                     aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                     <div class="modal-dialog">
                                                         <div class="modal-content">
@@ -226,7 +235,7 @@
                                                                     <br>
                                                                     <small>
                                                                         - Minimal penawaran lelang :
-                                                                        {{ count($penawaran) == 0? 'Rp. ' . number_format($item[0]->open_bid, 0, ',', '.'): 'Rp. ' . number_format($penawaran[0]->offer_price + 1000000, 0, ',', '.') }}
+                                                                        {{ count($penawaran) == 0 ? 'Rp. ' . number_format($item[0]->open_bid, 0, ',', '.') : 'Rp. ' . number_format($penawaran[0]->offer_price + 1000000, 0, ',', '.') }}
                                                                     </small>
                                                                     @if (count($penawaran) != 0)
                                                                         <br>
@@ -247,16 +256,18 @@
                                                             </form>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                </div> --}}
                                             @endif
                                         @endif
                                     @else
+                                        {{-- cek jika user yang sudah login dengan level selain 'user' --}}
                                         <a href="{{ route('item.penawaran', ['username' => $item[0]->username, 'id_item' => $item[0]->item_id]) }}"
                                             class="btn btn-sm btn-outline-success fw-bold">
                                             Lihat Penawaran Lelang
                                         </a>
                                     @endif
                                 @else
+                                    {{-- cek jika user yang belum login --}}
                                     <a href="{{ route('login') }}" class="btn btn-sm btn-outline-success fw-bold">
                                         Masuk Untuk Ikuti Lelang
                                     </a>
@@ -317,8 +328,7 @@
                                             Rp. {{ number_format($item->offer_price, 0, ',', '.') }}
                                         </td>
                                         <td>
-                                            {{ time_elapsed_string($item->updated_at) }} <i
-                                                class="bi-exclamation-circle"
+                                            {{ time_elapsed_string($item->updated_at) }} <i class="bi-exclamation-circle"
                                                 title="{{ date('d M Y H:i', strtotime($item->updated_at)) }}"></i>
                                         </td>
                                     </tr>

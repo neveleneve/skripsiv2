@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Brand;
 use App\Models\Item;
+use App\Models\JoinBid;
 use App\Models\Offer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -29,12 +30,13 @@ class GeneralController extends Controller
         // cek jika item tersedia
         $cekdata = DB::table('items')
             ->join('users', 'items.seller_id', 'users.id')
+            ->select('items.id')
             ->where([
                 'items.item_id' => $id_item,
                 'users.username' => $username,
             ])
-            ->count();
-        if ($cekdata == 1) {
+            ->get();
+        if (count($cekdata) == 1) {
             // get data of item
             $data = DB::table('items')
                 ->join('users', 'items.seller_id', 'users.id')
@@ -58,27 +60,22 @@ class GeneralController extends Controller
                 ->join('items', 'offers.id_item', 'items.item_id')
                 ->select('offers.*')
                 ->where([
-                    'items.item_id' => $id_item,
-                    // 'users.username' => $username,
-                    'offers.order_status' => 'done',
+                    'items.item_id' => $id_item
                 ])
                 ->orderBy('offer_price', 'desc')
                 ->get()
                 ->all();
+            // get data of join bidding status
             // check if user has make an offer
             if (isset(Auth::user()->id)) {
-                $cekdataakun = Offer::where([
-                    [
-                        'id_penawar', '=', Auth::user()->id
-                    ],
-                    [
-                        'order_status', '<>', 'cancel'
-                    ]
-                ])->select('offer_code')->get();
+                $datajoinbid = JoinBid::where([
+                    'user_id' => Auth::user()->id,
+                    'item_id' => $cekdata[0]->id,
+                ])->get();
             } else {
-                $cekdataakun = 0;
+                $datajoinbid = null;
             }
-        } elseif ($cekdata > 1) {
+        } elseif (count($cekdata) > 1) {
             Alert::alert('Aww Crap!', 'Terjadi kesalahan ketika membuka halaman item!', 'danger');
             return redirect(route('page.landing'));
         } else {
@@ -88,7 +85,7 @@ class GeneralController extends Controller
         return view('general.view_item', [
             'item' => $data,
             'penawaran' => $datapenawaran,
-            'cekpenawaran' => $cekdataakun,
+            'statusjoin' => $datajoinbid,
         ]);
     }
 
