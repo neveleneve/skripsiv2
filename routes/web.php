@@ -8,9 +8,10 @@ use Illuminate\Support\Facades\Route;
 // AdminController untuk user dengan role admin
 // UserController untuk user dengan role user
 Auth::routes();
+// test data route
+Route::get('test', 'Controller@test')->name('test');
 
 // User Auth Routes
-Route::get('test', 'Controller@test')->name('test');
 Route::get('favorite', 'UserController@favorite')->name('liked');
 
 Route::get('profile/status-lelang', 'UserController@status')->name('cart');

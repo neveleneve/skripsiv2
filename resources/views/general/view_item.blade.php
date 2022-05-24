@@ -175,15 +175,29 @@
                                             {{-- untuk selain user yang melelangkan barang --}}
                                             @if (count($statusjoin) > 0)
                                                 {{-- cek status join lelang user --}}
-                                                {{-- @if ($penawaran[0][])
-                                                    
-                                                @else
-                                                    
-                                                @endif --}}
-                                                <a href="{{ route('view.cart', ['offer_code' => wordwrap($cekpenawaran[0]['offer_code'], 4, '-', true)]) }}"
-                                                    class="btn btn-sm btn-outline-success fw-bold">
-                                                    Lihat Transaksi
-                                                </a>
+                                                @if ($statusjoin[0]['status'] == 'done')
+                                                    <div class="row">
+                                                        <div class="col-12 mb-2">
+                                                            <input type="number" class="form-control form-control-sm"
+                                                                placeholder="Masukkan Nominal Penawaran (Tertinggi : {{ count($penawaran) == 0 ? 'Rp. ' . number_format($item[0]->open_bid, 0, ',', '.') : 'Rp. ' . number_format($penawaran[0]->offer_price + 1000000, 0, ',', '.') }})">
+                                                        </div>
+                                                        <div class="col-12 d-grid gap-2 mb-2">
+                                                            <button class="btn btn-sm btn-outline-success fw-bold">
+                                                                Masukkan Penawaran
+                                                            </button>
+                                                        </div>
+                                                        <div class="col-12 d-grid gap-2">
+                                                            <button class="btn btn-sm btn-outline-primary fw-bold">
+                                                                Beli Sekarang
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                @elseif($statusjoin[0]['status'] == 'payment')
+
+                                                @elseif($statusjoin[0]['status'] == 'initiate')
+
+                                                @elseif($statusjoin[0]['status'] == 'cancel')
+                                                @endif
                                             @else
                                                 <button class="btn btn-sm btn-outline-success fw-bold">
                                                     Belum Join Lelang {{ count($statusjoin) . Auth::user()->username }}
@@ -289,7 +303,6 @@
                             <thead class="bg-success text-light">
                                 <tr>
                                     <th>No</th>
-                                    <th>Kode Penawaran</th>
                                     <th>Tipe Penawaran</th>
                                     <th>Harga Penawaran</th>
                                     <th>Waktu Penawaran</th>
@@ -302,21 +315,6 @@
                                 @forelse ($penawaran as $item)
                                     <tr>
                                         <td>{{ $no++ }}</td>
-                                        <td>
-                                            @auth
-                                                @if ($item->id_penawar == Auth::user()->id)
-                                                    <a class="text-dark"
-                                                        href="{{ route('view.cart', ['offer_code' => wordwrap($item->offer_code, 4, '-', true)]) }}"
-                                                        title="Penawaran Kamu">
-                                                        {{ strtoupper($item->offer_code) }}
-                                                    </a>
-                                                @else
-                                                    {{ strtoupper($item->offer_code) }}
-                                                @endif
-                                            @else
-                                                {{ strtoupper($item->offer_code) }}
-                                            @endauth
-                                        </td>
                                         <td>
                                             @if ($item->offer_type == 'bid')
                                                 Penawaran Lelang

@@ -72,9 +72,11 @@ class GeneralController extends Controller
                 $datajoinbid = JoinBid::where([
                     'user_id' => Auth::user()->id,
                     'item_id' => $cekdata[0]->id,
-                ])->get();
+                ])
+                    ->orderByRaw("FIELD(status, \"done\", \"initiate\", \"payment\", \"cancel\")")
+                    ->get();
             } else {
-                $datajoinbid = null;
+                $datajoinbid = [];
             }
         } elseif (count($cekdata) > 1) {
             Alert::alert('Aww Crap!', 'Terjadi kesalahan ketika membuka halaman item!', 'danger');
@@ -83,16 +85,16 @@ class GeneralController extends Controller
             Alert::alert('Aww Crap!', 'Data yang akan dibuka tidak tersedia!', 'danger');
             return redirect(route('page.landing'));
         }
-        dd([
-            'item' => $data,
-            'penawaran' => $datapenawaran,
-            'statusjoin' => $datajoinbid,
-        ]);
-        // return view('general.view_item', [
+        // dd([
         //     'item' => $data,
         //     'penawaran' => $datapenawaran,
         //     'statusjoin' => $datajoinbid,
         // ]);
+        return view('general.view_item', [
+            'item' => $data,
+            'penawaran' => $datapenawaran,
+            'statusjoin' => $datajoinbid,
+        ]);
     }
 
     public function viewuser($username)
