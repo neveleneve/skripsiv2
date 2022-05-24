@@ -27,6 +27,7 @@ class GeneralController extends Controller
 
     public function viewitem($username, $id_item)
     {
+        // dd(Auth::check());
         // cek jika item tersedia
         $cekdata = DB::table('items')
             ->join('users', 'items.seller_id', 'users.id')
@@ -82,11 +83,16 @@ class GeneralController extends Controller
             Alert::alert('Aww Crap!', 'Data yang akan dibuka tidak tersedia!', 'danger');
             return redirect(route('page.landing'));
         }
-        return view('general.view_item', [
+        dd([
             'item' => $data,
             'penawaran' => $datapenawaran,
             'statusjoin' => $datajoinbid,
         ]);
+        // return view('general.view_item', [
+        //     'item' => $data,
+        //     'penawaran' => $datapenawaran,
+        //     'statusjoin' => $datajoinbid,
+        // ]);
     }
 
     public function viewuser($username)
