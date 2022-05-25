@@ -47,3 +47,5 @@ Route::get('item/{username}/{id_item}/penawaran', 'HomeController@penawaran')->n
 
 // Admin Auth Routes
 Route::get('administrator', 'AdminController@dashboard')->name('admindashboard');
+
+// Payment Responses

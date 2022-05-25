@@ -194,18 +194,46 @@
                                                             </div>
                                                         </div>
                                                     @elseif($statusjoin[0]['status'] == 'payment')
-
-                                                    @elseif($statusjoin[0]['status'] == 'initiate')
-
-                                                    @elseif($statusjoin[0]['status'] == 'cancel')
-                                                        <button class="btn btn-sm btn-outline-success fw-bold">
-                                                            Belum Join Lelang
+                                                        <button class="btn btn-sm btn-outline-success fw-bold"
+                                                            title="Lihat Pembayaran">
+                                                            Menunggu Pembayaran
                                                         </button>
+                                                    @elseif($statusjoin[0]['status'] == 'initiate')
+                                                        <button class="btn btn-sm btn-outline-success fw-bold"
+                                                            title="Lihat Pembayaran">
+                                                            Menunggu Pembayaran
+                                                        </button>
+                                                    @elseif($statusjoin[0]['status'] == 'cancel')
+                                                        <form class="row" action="{{ route('penawaran') }}"
+                                                            method="post">
+                                                            <input type="hidden" name="penjual"
+                                                                value="{{ Crypt::encrypt($item[0]->username) }}">
+                                                            <input type="hidden" name="item"
+                                                                value="{{ Crypt::encrypt($item[0]->id) }}">
+                                                            <div class="col-12 d-grid gap-2">
+                                                                {{ csrf_field() }}
+                                                                <button class="btn btn-sm btn-outline-success fw-bold"
+                                                                    type="submit">
+                                                                    Join Lelang Ini!
+                                                                </button>
+                                                            </div>
+                                                        </form>
                                                     @endif
                                                 @else
-                                                    <button class="btn btn-sm btn-outline-success fw-bold">
-                                                        Belum Join Lelang
-                                                    </button>
+                                                    <form class="row" action="{{ route('penawaran') }}"
+                                                        method="post">
+                                                        <input type="hidden" name="penjual"
+                                                            value="{{ Crypt::encrypt($item[0]->username) }}">
+                                                        <input type="hidden" name="item"
+                                                            value="{{ Crypt::encrypt($item[0]->id) }}">
+                                                        <div class="col-12 d-grid gap-2">
+                                                            {{ csrf_field() }}
+                                                            <button class="btn btn-sm btn-outline-success fw-bold"
+                                                                type="submit">
+                                                                Join Lelang Ini!
+                                                            </button>
+                                                        </div>
+                                                    </form>
                                                 @endif
                                             @endif
                                         @else

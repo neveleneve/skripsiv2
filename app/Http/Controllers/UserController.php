@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Item;
+use App\Models\JoinBid;
 use App\Models\Offer;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -123,6 +126,78 @@ class UserController extends Controller
 
     public function ikutlelang(Request $data)
     {
+        $item = Crypt::decrypt($data->item);
+        $penjual = Crypt::decrypt($data->penjual);
+        $dataitem = Item::where('id', $item)->get('item_id');
+        if (Auth::check()) {
+            if ($penjual == Auth::user()->username) {
+                Alert::alert('Aww Crap!', 'Kamu merupakan penjual item ini!', 'danger');
+                return redirect(route('item.view', ['username' => $data->nama_penjual, 'id_item' => $data->item_id]));
+            } else {
+                $checkdata = JoinBid::where([
+                    [
+                        'status', '<>', 'cancel'
+                    ],
+                    'item_id' => $item,
+                    'user_id' => Auth::user()->id,
+                ])->get();
+                if (count($checkdata) > 0) {
+                    Alert::alert('Aww Crap!', 'Kamu sudah mengikuti pelelangan item ini!', 'danger');
+                    return redirect(route('item.view', ['username' => $data->nama_penjual, 'id_item' => $data->item_id]));
+                } else {
+                    $order_id = Auth::user()->username . '-' . $dataitem[0]['item_id'];
+                    $param = [
+                        'transaction_details' => [
+                            'order_id' => $order_id,
+                            'gross_amount' => 150000,
+                        ],
+                        'item_details' => [
+                            [
+                                'id' => 'OFFERFEE',
+                                'price' => 150000,
+                                'quantity' => 1,
+                                'name' => 'LelanginStore Join Bid. Item ' . $dataitem[0]['item_id'],
+                            ]
+                        ],
+                        'customer_details' => [
+                            'first_name' => Auth::user()->name,
+                            'email' => Auth::user()->email,
+                        ]
+                    ];
+                    $this->initPaymentGateway();
+                    try {
+                        $payment_url = \Midtrans\Snap::getSnapToken($param);
+                    } catch (Exception $e) {
+                        dd($e->getMessage());
+                    }
+                    $datatodb = [
+                        'user_id' =>  Auth::user()->id,
+                        'item_id' => $item,
+                        'order_id' => Auth::user()->username . '-' . $dataitem[0]['item_id'],
+                        'payment_url' => $payment_url,
+                        'status' => 'initiate'
+                    ];
+                    dd([
+                        $param,
+                        $datatodb
+                    ]);
+                    // JoinBid::insert([
+
+                    // ]);
+                    Alert::alert('Yeay!', 'Berhasil melakukan penawaran! Silahkan menyelesaikan pembayaran!', 'success');
+                    return redirect(route('item.view', [
+                        'username' => $data->nama_penjual,
+                        'id_item' => $data->item_id
+                    ]));
+                }
+            }
+        } else {
+            Alert::alert('Aww Crap!', 'Kamu harus masuk untuk melakukan transaksi ini!', 'danger');
+            return redirect(route('item.view', [
+                'username' => $data->penjual,
+                'id_item' => $dataitem[0]['item_id']
+            ]));
+        }
         // check if user have done the proccess
         // if (Auth::check()) {
         //     if ($data->nama_penjual == Auth::user()->username) {

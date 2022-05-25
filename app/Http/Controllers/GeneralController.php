@@ -43,7 +43,7 @@ class GeneralController extends Controller
                 ->select([
                     'items.*',
                     'users.username',
-                    'users.id',
+                    'users.id as user_id',
                     'brands.name as brand_name',
                     'categories.name as category_name'
                 ])
