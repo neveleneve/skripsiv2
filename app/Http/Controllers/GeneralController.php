@@ -27,8 +27,6 @@ class GeneralController extends Controller
 
     public function viewitem($username, $id_item)
     {
-        // dd(Auth::check());
-        // cek jika item tersedia
         $cekdata = DB::table('items')
             ->join('users', 'items.seller_id', 'users.id')
             ->select('items.id')
@@ -38,7 +36,6 @@ class GeneralController extends Controller
             ])
             ->get();
         if (count($cekdata) == 1) {
-            // get data of item
             $data = DB::table('items')
                 ->join('users', 'items.seller_id', 'users.id')
                 ->join('brands', 'items.brand', 'brands.id')
@@ -55,7 +52,6 @@ class GeneralController extends Controller
                     'users.username' => $username,
                 ])
                 ->get();
-            // get data of item's offers
             $datapenawaran = DB::table('offers')
                 ->join('users', 'offers.id_seller', 'users.id')
                 ->join('items', 'offers.id_item', 'items.item_id')
@@ -66,9 +62,7 @@ class GeneralController extends Controller
                 ->orderBy('offer_price', 'desc')
                 ->get()
                 ->all();
-            // get data of join bidding status
-            // check if user has make an offer
-            if (isset(Auth::user()->id)) {
+            if (Auth::check()) {
                 $datajoinbid = JoinBid::where([
                     'user_id' => Auth::user()->id,
                     'item_id' => $cekdata[0]->id,

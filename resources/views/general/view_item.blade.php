@@ -161,142 +161,140 @@
                         <div class="row">
                             <div class="col-0 col-lg-8"></div>
                             <div class="col-12 col-lg-4 d-grid gap-2">
-                                @auth
-                                    {{-- cek jika user yang sudah login --}}
-                                    @if (Auth::user()->role == 'user')
-                                        {{-- cek jika user yang sudah login dengan level 'user' --}}
-                                        @if (Auth::user()->username == $item[0]->username)
-                                            {{-- untuk user yang melelangkan barang --}}
+                                @if (date('Y-m-d H:i:s') > date('Y-m-d H:i:s', strtotime($item[0]->end_time)))
+                                @else
+                                    @auth
+                                        @if (Auth::user()->role == 'user')
+                                            @if (Auth::user()->username == $item[0]->username)
+                                                <a href="{{ route('item.penawaran', ['username' => $item[0]->username, 'id_item' => $item[0]->item_id]) }}"
+                                                    class="btn btn-sm btn-outline-success fw-bold">
+                                                    Lihat Penawaran Lelang
+                                                </a>
+                                            @else
+                                                @if (count($statusjoin) > 0)
+                                                    @if ($statusjoin[0]['status'] == 'done')
+                                                        <div class="row">
+                                                            <div class="col-12 mb-2">
+                                                                <input type="number" class="form-control form-control-sm"
+                                                                    placeholder="Masukkan Nominal Penawaran (Tertinggi : {{ count($penawaran) == 0 ? 'Rp. ' . number_format($item[0]->open_bid, 0, ',', '.') : 'Rp. ' . number_format($penawaran[0]->offer_price + 1000000, 0, ',', '.') }})"
+                                                                    title="Masukkan Nominal Penawaran (Tertinggi : {{ count($penawaran) == 0 ? 'Rp. ' . number_format($item[0]->open_bid, 0, ',', '.') : 'Rp. ' . number_format($penawaran[0]->offer_price + 1000000, 0, ',', '.') }})">
+                                                            </div>
+                                                            <div class="col-6 d-grid gap-2">
+                                                                <button class="btn btn-sm btn-outline-success fw-bold"
+                                                                    type="submit">
+                                                                    Penawaran
+                                                                </button>
+                                                            </div>
+                                                            <div class="col-6 d-grid gap-2">
+                                                                <button class="btn btn-sm btn-outline-primary fw-bold"
+                                                                    type="button"
+                                                                    onclick="return confirm('Beli langsung diharga Rp. {{ number_format($item[0]->buyitnow, 0, ',', '.') }}')">
+                                                                    Beli Langsung
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    @elseif($statusjoin[0]['status'] == 'payment')
+
+                                                    @elseif($statusjoin[0]['status'] == 'initiate')
+
+                                                    @elseif($statusjoin[0]['status'] == 'cancel')
+                                                        <button class="btn btn-sm btn-outline-success fw-bold">
+                                                            Belum Join Lelang
+                                                        </button>
+                                                    @endif
+                                                @else
+                                                    <button class="btn btn-sm btn-outline-success fw-bold">
+                                                        Belum Join Lelang
+                                                    </button>
+                                                @endif
+                                            @endif
+                                        @else
+                                            {{-- cek jika user yang sudah login dengan level selain 'user' --}}
                                             <a href="{{ route('item.penawaran', ['username' => $item[0]->username, 'id_item' => $item[0]->item_id]) }}"
                                                 class="btn btn-sm btn-outline-success fw-bold">
                                                 Lihat Penawaran Lelang
                                             </a>
-                                        @else
-                                            {{-- untuk selain user yang melelangkan barang --}}
-                                            @if (count($statusjoin) > 0)
-                                                {{-- cek status join lelang user --}}
-                                                @if ($statusjoin[0]['status'] == 'done')
-                                                    <div class="row">
-                                                        <div class="col-12 mb-2">
-                                                            <input type="number" class="form-control form-control-sm"
-                                                                placeholder="Masukkan Nominal Penawaran (Tertinggi : {{ count($penawaran) == 0 ? 'Rp. ' . number_format($item[0]->open_bid, 0, ',', '.') : 'Rp. ' . number_format($penawaran[0]->offer_price + 1000000, 0, ',', '.') }})">
-                                                        </div>
-                                                        <div class="col-12 d-grid gap-2 mb-2">
-                                                            <button class="btn btn-sm btn-outline-success fw-bold">
-                                                                Masukkan Penawaran
-                                                            </button>
-                                                        </div>
-                                                        <div class="col-12 d-grid gap-2">
-                                                            <button class="btn btn-sm btn-outline-primary fw-bold">
-                                                                Beli Sekarang
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                @elseif($statusjoin[0]['status'] == 'payment')
-
-                                                @elseif($statusjoin[0]['status'] == 'initiate')
-
-                                                @elseif($statusjoin[0]['status'] == 'cancel')
-                                                @endif
-                                            @else
-                                                <button class="btn btn-sm btn-outline-success fw-bold">
-                                                    Belum Join Lelang {{ count($statusjoin) . Auth::user()->username }}
-                                                </button>
-                                                {{-- modal mengikuti lelang --}}
-                                                {{-- <div class="modal fade" id="modalikutlelang" tabindex="-1"
-                                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                    <div class="modal-dialog">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h5 class="modal-title" id="exampleModalLabel">
-                                                                    Penawaran Lelang
-                                                                </h5>
-                                                                <button type="button" class="btn-close"
-                                                                    data-bs-dismiss="modal" aria-label="Close"></button>
-                                                            </div>
-                                                            <form action="{{ route('penawaran') }}" method="post">
-                                                                {{ csrf_field() }}
-                                                                <input type="hidden" name="user_id"
-                                                                    value="{{ Auth::user()->id }}">
-                                                                <input type="hidden" name="nama_lengkap"
-                                                                    value="{{ Auth::user()->name }}">
-                                                                <input type="hidden" name="item_id"
-                                                                    value="{{ $item[0]->item_id }}">
-                                                                <input type="hidden" name="nama_penjual"
-                                                                    value="{{ $item[0]->username }}">
-                                                                <input type="hidden" name="id_penjual"
-                                                                    value="{{ $item[0]->id }}">
-                                                                <div class="modal-body">
-                                                                    <label class="fw-bold" for="jenis">
-                                                                        Jenis Penawaran
-                                                                    </label>
-                                                                    <select name="jenis" id="jenis"
-                                                                        class="form-control form-control-sm mb-3">
-                                                                        <option value="bid">Lelang</option>
-                                                                        <option value="buy">Beli Langsung</option>
-                                                                    </select>
-                                                                    <label class="fw-bold" for="harga">
-                                                                        Harga Penawaran
-                                                                    </label>
-                                                                    <input type="number" class="form-control form-control-sm"
-                                                                        name="harga" id="harga" step="1000000"
-                                                                        min="{{ count($penawaran) == 0 ? $item[0]->open_bid : $penawaran[0]->offer_price }}"
-                                                                        value="{{ count($penawaran) == 0 ? $item[0]->open_bid : $penawaran[0]->offer_price + 1000000 }}">
-                                                                    <small>
-                                                                        - Penawaran yang dimasukkan merupakan Kelipatan Rp.
-                                                                        1.000.000
-                                                                    </small>
-                                                                    <br>
-                                                                    <small>
-                                                                        - Minimal penawaran lelang :
-                                                                        {{ count($penawaran) == 0 ? 'Rp. ' . number_format($item[0]->open_bid, 0, ',', '.') : 'Rp. ' . number_format($penawaran[0]->offer_price + 1000000, 0, ',', '.') }}
-                                                                    </small>
-                                                                    @if (count($penawaran) != 0)
-                                                                        <br>
-                                                                        <small>
-                                                                            - Harga penawaran tertinggi :
-                                                                            Rp.
-                                                                            {{ number_format($penawaran[0]->offer_price, 0, ',', '.') }}
-                                                                        </small>
-                                                                    @endif
-                                                                </div>
-                                                                <div class="modal-footer">
-                                                                    <button type="button" class="btn btn-outline-success"
-                                                                        data-bs-dismiss="modal">Batal</button>
-                                                                    <button type="submit" class="btn btn-success">
-                                                                        Lanjutkan
-                                                                    </button>
-                                                                </div>
-                                                            </form>
-                                                        </div>
-                                                    </div>
-                                                </div> --}}
-                                            @endif
                                         @endif
                                     @else
-                                        {{-- cek jika user yang sudah login dengan level selain 'user' --}}
-                                        <a href="{{ route('item.penawaran', ['username' => $item[0]->username, 'id_item' => $item[0]->item_id]) }}"
-                                            class="btn btn-sm btn-outline-success fw-bold">
-                                            Lihat Penawaran Lelang
+                                        {{-- cek jika user yang belum login --}}
+                                        <a href="{{ route('login') }}" class="btn btn-sm btn-outline-success fw-bold">
+                                            Masuk Untuk Ikuti Lelang
                                         </a>
-                                    @endif
-                                @else
-                                    {{-- cek jika user yang belum login --}}
-                                    <a href="{{ route('login') }}" class="btn btn-sm btn-outline-success fw-bold">
-                                        Masuk Untuk Ikuti Lelang
-                                    </a>
-                                @endauth
+                                    @endauth
+                                @endif
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        @auth
+            @if (Auth::user()->role == 'user')
+                @if (Auth::user()->username != $item[0]->username)
+                    @if (count($statusjoin) > 0)
+                        @if ($statusjoin[0]['status'] == 'done')
+                            <div class="row mb-3">
+                                <div class="col-12">
+                                    <div class="card">
+                                        <div class="card-header text-center bg-light text-success">
+                                            <h4 class="fw-bold">Penawaran Anda</h4>
+                                        </div>
+                                        <div class="card-body table-responsive">
+                                            <table class="table table-hover table-bordered text-nowrap text-center">
+                                                <thead class="bg-success text-light">
+                                                    <tr>
+                                                        <th>No</th>
+                                                        <th>Tipe Penawaran</th>
+                                                        <th>Harga Penawaran</th>
+                                                        <th>Waktu Penawaran</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @php
+                                                        $no = 1;
+                                                    @endphp
+                                                    @forelse ($penawaran as $item)
+                                                        <tr>
+                                                            <td>{{ $no++ }}</td>
+                                                            <td>
+                                                                @if ($item->offer_type == 'bid')
+                                                                    Penawaran Lelang
+                                                                @elseif ($item->offer_type == 'buy')
+                                                                    Beli Langsung
+                                                                @endif
+                                                            </td>
+                                                            <td>
+                                                                Rp. {{ number_format($item->offer_price, 0, ',', '.') }}
+                                                            </td>
+                                                            <td>
+                                                                {{ time_elapsed_string($item->updated_at) }} <i
+                                                                    class="bi-exclamation-circle"
+                                                                    title="{{ date('d M Y H:i', strtotime($item->updated_at)) }}"></i>
+                                                            </td>
+                                                        </tr>
+                                                    @empty
+                                                        <tr>
+                                                            <td colspan="5">
+                                                                <h3 class="text-center text-success">Belum ada penawaran</h3>
+                                                            </td>
+                                                        </tr>
+                                                    @endforelse
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+                    @endif
+                @endif
+            @endif
+        @endauth
         <div class="row">
             <div class="col-12">
                 <div class="card">
                     <div class="card-header text-center bg-light text-success">
-                        <h4 class="fw-bold">Penawaran</h4>
+                        <h4 class="fw-bold">Seluruh Penawaran</h4>
                     </div>
                     <div class="card-body table-responsive">
                         <table class="table table-hover table-bordered text-nowrap text-center">
@@ -326,7 +324,8 @@
                                             Rp. {{ number_format($item->offer_price, 0, ',', '.') }}
                                         </td>
                                         <td>
-                                            {{ time_elapsed_string($item->updated_at) }} <i class="bi-exclamation-circle"
+                                            {{ time_elapsed_string($item->updated_at) }} <i
+                                                class="bi-exclamation-circle"
                                                 title="{{ date('d M Y H:i', strtotime($item->updated_at)) }}"></i>
                                         </td>
                                     </tr>
