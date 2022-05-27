@@ -41,7 +41,6 @@
                             <th>Kode Penawaran</th>
                             <th>Tipe Penawaran</th>
                             <th>Harga Penawaran</th>
-                            <th>Status Pembayaran</th>
                             <th>Waktu Penawaran</th>
                         </tr>
                     </thead>
@@ -63,44 +62,6 @@
                                     @endif
                                 </td>
                                 <td>Rp. {{ number_format($item->offer_price, 0, ',', '.') }}</td>
-                                <td>
-                                    @if ($item->order_status == 'initiate')
-                                        <p class="m-0">
-                                            Belum ada pembayaran
-                                            <small>
-                                                <a class="text-decoration-none"
-                                                    href="{{ route('view.cart', ['offer_code' => wordwrap($item->offer_code, 4, '-', true)]) }}">
-                                                    <i title="Belum melakukan pembayaran! Klik untuk bayar!"
-                                                        class="bi-exclamation-circle text-success pe-auto"></i>
-                                                </a>
-                                            </small>
-                                        </p>
-                                    @elseif ($item->order_status == 'payment')
-                                        <p class="m-0">
-                                            Menunggu status pembayaran
-                                            <small>
-                                                <i title="Pembayaran berhasil dilakukan! Menunggu pembaruan."
-                                                    class="bi-exclamation-circle text-success pe-auto"></i>
-                                            </small>
-                                        </p>
-                                    @elseif($item->order_status == 'cancel')
-                                        <p class="m-0">
-                                            Dibatalkan
-                                            <small>
-                                                <i title="Penawaran dibatalkan!"
-                                                    class="bi-exclamation-circle text-success pe-auto"></i>
-                                            </small>
-                                        </p>
-                                    @elseif($item->order_status == 'done')
-                                        <p class="m-0">
-                                            Selesai
-                                            <small>
-                                                <i title="Pesanan selesai!"
-                                                    class="bi-exclamation-circle text-success pe-auto"></i>
-                                            </small>
-                                        </p>
-                                    @endif
-                                </td>
                                 <td>{{ time_elapsed_string($item->created_at) }} <i class="bi-exclamation-circle"
                                         title="{{ date('d M Y H:i', strtotime($item->created_at)) }}"></i></td>
                             </tr>

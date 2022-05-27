@@ -229,7 +229,7 @@
                                                         <div class="col-12 d-grid gap-2">
                                                             {{ csrf_field() }}
                                                             <button class="btn btn-sm btn-outline-success fw-bold"
-                                                                type="submit">
+                                                                type="submit" onclick="return confirm('Ikuti lelang ini???')">
                                                                 Join Lelang Ini!
                                                             </button>
                                                         </div>

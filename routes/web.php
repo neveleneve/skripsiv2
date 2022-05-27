@@ -17,6 +17,8 @@ Route::get('favorite', 'UserController@favorite')->name('liked');
 Route::get('profile/status-lelang', 'UserController@status')->name('cart');
 Route::get('profile/status-lelang/{offer_code}', 'UserController@viewstatus')->name('view.cart');
 
+Route::get('profile/pembayaran', 'UserController@pembayaran')->name('payment');
+
 Route::post('ikut-lelang', 'UserController@ikutlelang')->name('penawaran');
 
 Route::get('cancel/{id}', 'UserController@canceloffer')->name('offer.cancel');

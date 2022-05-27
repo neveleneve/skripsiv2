@@ -177,24 +177,25 @@ class UserController extends Controller
                         'payment_url' => $payment_url,
                         'status' => 'initiate'
                     ];
-                    dd([
-                        $param,
+                    // dd([
+                    //     'datakemidtrans' => $param,
+                    //     'datakedatabase' => $datatodb,
+                    //     'paymenturl' => $payment_url,
+                    // ]);
+                    JoinBid::insert([
                         $datatodb
                     ]);
-                    // JoinBid::insert([
-
-                    // ]);
-                    Alert::alert('Yeay!', 'Berhasil melakukan penawaran! Silahkan menyelesaikan pembayaran!', 'success');
+                    Alert::alert('Yeay!', 'Berhasil mengikuti lelang! Silahkan menyelesaikan pembayarannya yaa!', 'success');
                     return redirect(route('item.view', [
-                        'username' => $data->nama_penjual,
-                        'id_item' => $data->item_id
+                        'username' => $penjual,
+                        'id_item' => $dataitem[0]['item_id']
                     ]));
                 }
             }
         } else {
             Alert::alert('Aww Crap!', 'Kamu harus masuk untuk melakukan transaksi ini!', 'danger');
             return redirect(route('item.view', [
-                'username' => $data->penjual,
+                'username' => $penjual,
                 'id_item' => $dataitem[0]['item_id']
             ]));
         }
@@ -305,5 +306,10 @@ class UserController extends Controller
             Alert::alert('Aww Crap!', 'Kamu tidak bisa mengakses halaman ini!', 'danger');
             return redirect(route('page.landing'));
         }
+    }
+
+    public function pembayaran()
+    {
+        echo 'pembayaran';
     }
 }

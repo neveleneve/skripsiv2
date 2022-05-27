@@ -96,7 +96,10 @@ class GeneralController extends Controller
         echo $username;
         if ($username == 'status-lelang') {
             return redirect(route('cart'));
-        }
+        } 
+        // elseif ($username == 'pembayaran') {
+        //     # code...
+        // }
     }
 
     public function mostviewed()
