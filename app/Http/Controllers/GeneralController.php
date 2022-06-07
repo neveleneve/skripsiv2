@@ -46,7 +46,7 @@ class GeneralController extends Controller
                 ->select([
                     'items.*',
                     'users.username',
-                    'users.id',
+                    'users.id as user_id',
                     'brands.name as brand_name',
                     'categories.name as category_name'
                 ])
@@ -94,7 +94,10 @@ class GeneralController extends Controller
         echo $username;
         if ($username == 'status-lelang') {
             return redirect(route('cart'));
-        }
+        } 
+        // elseif ($username == 'pembayaran') {
+        //     # code...
+        // }
     }
 
     public function mostviewed()

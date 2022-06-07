@@ -37,6 +37,11 @@
                                 <i class="bi bi-bookmark-check"></i>
                             </a>
                         </li>
+                        <li class="nav-item d-none d-lg-block" title="Pembayaran">
+                            <a class="nav-link text-success" href="{{ route('payment') }}">
+                                <i class="bi bi-wallet"></i>
+                            </a>
+                        </li>
                     @endif
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle text-success fw-bold" href="#" id="navbarDropdown" role="button"
@@ -48,7 +53,9 @@
                                 <li class="d-block d-lg-none"><a class="dropdown-item" href="{{ route('liked') }}">Item
                                         Favorit</a></li>
                                 <li class="d-block d-lg-none"><a class="dropdown-item"
-                                        href="{{ route('cart') }}">Keranjang belanjamu</a></li>
+                                        href="{{ route('cart') }}">Status Lelang</a></li>
+                                <li class="d-block d-lg-none"><a class="dropdown-item"
+                                        href="{{ route('payment') }}">Pembayaran</a></li>
                             @endif
                             @if (Auth::user()->role == 'admin')
                                 <li>
