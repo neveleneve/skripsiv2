@@ -7,7 +7,9 @@ use Illuminate\Support\Facades\Route;
 // GeneralController untuk semua user
 // AdminController untuk user dengan role admin
 // UserController untuk user dengan role user
-Auth::routes();
+Auth::routes([
+    'verify' => true
+]);
 // test data route
 Route::get('test', 'Controller@test')->name('test');
 

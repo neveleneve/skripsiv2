@@ -170,6 +170,11 @@
                                                     class="btn btn-sm btn-outline-success fw-bold">
                                                     Lihat Penawaran Lelang
                                                 </a>
+                                            @elseif(Auth::user()->hasVerifiedEmail() == false)
+                                                <a href="{{ route('verification.notice') }}"
+                                                    class="btn btn-sm btn-outline-success fw-bold">
+                                                    Verifikasi Email
+                                                </a>
                                             @else
                                                 @if (count($statusjoin) > 0)
                                                     @if ($statusjoin[0]['status'] == 'done')

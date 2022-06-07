@@ -20,7 +20,7 @@ class UserSeeder extends Seeder
                 'name' => 'Mohammad Farid Hasymi',
                 'username' => 'administrator',
                 'email' => 'frdhsym@gmail.com',
-                'email_verified_at' => null,
+                'email_verified_at' => date('Y-m-d H:i:s'),
                 'password' => Hash::make('administrator'),
                 'role' => 'admin',
                 'created_at' => date('Y-m-d H:i:s'),

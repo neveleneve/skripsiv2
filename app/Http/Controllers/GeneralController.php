@@ -35,6 +35,9 @@ class GeneralController extends Controller
                 'users.username' => $username,
             ])
             ->get();
+        // $user = Auth::user();
+        // dd($user->hasVerifiedEmail());
+
         if (count($cekdata) == 1) {
             $data = DB::table('items')
                 ->join('users', 'items.seller_id', 'users.id')
@@ -79,11 +82,6 @@ class GeneralController extends Controller
             Alert::alert('Aww Crap!', 'Data yang akan dibuka tidak tersedia!', 'danger');
             return redirect(route('page.landing'));
         }
-        // dd([
-        //     'item' => $data,
-        //     'penawaran' => $datapenawaran,
-        //     'statusjoin' => $datajoinbid,
-        // ]);
         return view('general.view_item', [
             'item' => $data,
             'penawaran' => $datapenawaran,
